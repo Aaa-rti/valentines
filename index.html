@@ -1,64 +1,63 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Valentine.exe 💘</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Surf Valentine 🌊💘</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="card" id="app" aria-live="polite">
-    <header class="header">
-      <div class="badge">VALENTINE.EXE</div>
-      <h1>Hey you 💘</h1>
-      <p class="sub">Click the hearts to power up the love meter. Unlock the secret message.</p>
-    </header>
+  <!-- Sky / background -->
+  <div class="scene" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="sparkles"></div>
+  </div>
 
-    <section class="meter" aria-label="Love meter">
-      <div class="meterTop">
-        <span id="meterLabel">Love Meter</span>
-        <span class="meterValue"><span id="score">0</span>/<span id="target">12</span></span>
-      </div>
-      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0">
-        <div class="barFill" id="barFill"></div>
-      </div>
-      <p class="hint" id="hint">Pro tip: combos are real. Click fast 👀</p>
-    </section>
+  <!-- Waves "wash" overlay -->
+  <div class="waves" id="waves" aria-hidden="true">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+    <div class="foam"></div>
+  </div>
 
-    <section class="arena" aria-label="Heart clicking game">
-      <div class="hearts" id="hearts"></div>
-      <div class="controls">
-        <button class="btn ghost" id="resetBtn" type="button">Reset</button>
-        <button class="btn" id="shareBtn" type="button">Copy link</button>
+  <!-- Main content -->
+  <main class="content" id="content" aria-live="polite">
+    <section class="board-wrap" id="boardWrap">
+      <div class="board" role="img" aria-label="Surfboard">
+        <div class="board-shine"></div>
+        <div class="board-fin"></div>
       </div>
-    </section>
 
-    <section class="unlock" id="unlock" hidden>
-      <h2>Unlocked 🔓</h2>
-      <p class="message" id="message">
-        You did it. You officially have <strong>maximum boyfriend privileges</strong>.
+      <h1 class="question" id="question">
+        will you be my valentine?
+      </h1>
+
+      <p class="sub" id="sub">
+        (Answer carefully. The ocean is watching.)
       </p>
 
-      <div class="secret">
-        <label for="code">Optional: enter the secret code</label>
-        <div class="row">
-          <input id="code" type="text" inputmode="text" autocomplete="off" placeholder="hint: our thing…" />
-          <button class="btn" id="codeBtn" type="button">Enter</button>
-        </div>
-        <p class="tiny" id="codeResult"></p>
+      <div class="choices" id="choices">
+        <button class="starfish yes" id="yesBtn" type="button">
+          YES
+        </button>
+
+        <button class="starfish no" id="noBtn" type="button" aria-disabled="true" tabindex="-1">
+          NO
+        </button>
       </div>
 
-      <div class="cta">
-        <button class="btn" id="confettiBtn" type="button">Celebrate 🎉</button>
+      <div class="result" id="result" hidden>
+        <div class="result-card">
+          <h2>Yessss! 🏄‍♂️💘</h2>
+          <p>You’re officially my favorite human in the lineup.</p>
+          <p class="tiny">Now go claim your valentine’s prize (a kiss, snack, or surf trip—dealer’s choice).</p>
+          <button class="again" id="againBtn" type="button">Play again</button>
+        </div>
       </div>
     </section>
-
-    <footer class="footer">
-      <p class="tiny">Made with suspicious levels of affection.</p>
-    </footer>
   </main>
 
   <script src="script.js"></script>
 </body>
 </html>
-
