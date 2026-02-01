@@ -1,1 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine.exe 💘</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="card" id="app" aria-live="polite">
+    <header class="header">
+      <div class="badge">VALENTINE.EXE</div>
+      <h1>Hey you 💘</h1>
+      <p class="sub">Click the hearts to power up the love meter. Unlock the secret message.</p>
+    </header>
+
+    <section class="meter" aria-label="Love meter">
+      <div class="meterTop">
+        <span id="meterLabel">Love Meter</span>
+        <span class="meterValue"><span id="score">0</span>/<span id="target">12</span></span>
+      </div>
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0">
+        <div class="barFill" id="barFill"></div>
+      </div>
+      <p class="hint" id="hint">Pro tip: combos are real. Click fast 👀</p>
+    </section>
+
+    <section class="arena" aria-label="Heart clicking game">
+      <div class="hearts" id="hearts"></div>
+      <div class="controls">
+        <button class="btn ghost" id="resetBtn" type="button">Reset</button>
+        <button class="btn" id="shareBtn" type="button">Copy link</button>
+      </div>
+    </section>
+
+    <section class="unlock" id="unlock" hidden>
+      <h2>Unlocked 🔓</h2>
+      <p class="message" id="message">
+        You did it. You officially have <strong>maximum boyfriend privileges</strong>.
+      </p>
+
+      <div class="secret">
+        <label for="code">Optional: enter the secret code</label>
+        <div class="row">
+          <input id="code" type="text" inputmode="text" autocomplete="off" placeholder="hint: our thing…" />
+          <button class="btn" id="codeBtn" type="button">Enter</button>
+        </div>
+        <p class="tiny" id="codeResult"></p>
+      </div>
+
+      <div class="cta">
+        <button class="btn" id="confettiBtn" type="button">Celebrate 🎉</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p class="tiny">Made with suspicious levels of affection.</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
