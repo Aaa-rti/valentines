@@ -4,19 +4,230 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Surf Valentine 🌊💘</title>
-  <link rel="stylesheet" href="./styles.css" />
+
+  <style>
+    :root{
+      --bg1:#ffefc7;
+      --bg2:#ffd1dc;
+      --ink:#0b1b2b;
+      --shadow: rgba(0,0,0,.18);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      height:100%;
+      overflow:hidden; /* no scroll */
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--bg1), var(--bg2) 60%, #b7f2ff 120%);
+    }
+
+    /* Background */
+    .scene{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+    .sun{
+      position:absolute;
+      top:6vh;
+      left:8vw;
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff7cc, #ffd24d);
+      filter: drop-shadow(0 10px 20px rgba(255, 210, 77, .35));
+      opacity:.95;
+    }
+    .sparkles{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 25%, rgba(255,255,255,.75) 0 2px, transparent 3px),
+        radial-gradient(circle at 50% 15%, rgba(255,255,255,.55) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,.65) 0 2px, transparent 3px),
+        radial-gradient(circle at 70% 10%, rgba(255,255,255,.35) 0 1.2px, transparent 3px);
+      opacity:.5;
+      animation: twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{
+      0%,100%{ opacity:.35; transform: translateY(0); }
+      50%{ opacity:.6; transform: translateY(2px); }
+    }
+
+    /* Wave overlay */
+    .wave-wrap{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:5;
+
+      transform: translateX(110%);
+      animation: crashIn 2.2s ease-out forwards;
+      will-change: transform, opacity;
+    }
+
+    /* Keep the wave visible briefly before fading */
+    @keyframes crashIn{
+      0%   { transform: translateX(110%); opacity:1; }
+      70%  { transform: translateX(0%);   opacity:1; }
+      88%  { transform: translateX(0%);   opacity:1; }
+      100% { transform: translateX(0%);   opacity:0; }
+    }
+
+    .wave-svg{
+      width:140%;
+      height:100%;
+      display:block;
+    }
+
+    /* Main layout */
+    .content{
+      position:relative;
+      z-index:10;
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
+
+    .board-wrap{
+      width:min(760px, 92vw);
+      text-align:center;
+      opacity:0;
+      transform: translateY(10px);
+      animation: reveal 1s ease-out forwards;
+      animation-delay: 1.0s;
+    }
+    @keyframes reveal{
+      to { opacity:1; transform: translateY(0); }
+    }
+
+    /* Surfboard */
+    .board{
+      width:150px;
+      max-width:40vw;
+      margin: 0 auto 18px;
+      transform: rotate(-7deg);
+      filter: drop-shadow(0 22px 45px rgba(0,0,0,.24));
+      display:block;
+    }
+
+    /* Text */
+    .question{
+      margin: 10px 0 6px;
+      font-size: clamp(28px, 4vw, 46px);
+      text-transform: lowercase;
+      letter-spacing:.3px;
+    }
+    .sub{
+      margin: 0 0 18px;
+      opacity:.85;
+    }
+
+    /* Buttons area */
+    .choices{
+      position:relative;
+      width:min(520px, 92vw);
+      height: 170px;
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 26px;
+    }
+
+    /* Starfish buttons built from SVG (no clip-path compatibility issues) */
+    .starBtn{
+      border:0;
+      background: transparent;
+      padding:0;
+      cursor:pointer;
+      user-select:none;
+      position:relative;
+      width:160px;
+      height:140px;
+      display:grid;
+      place-items:center;
+      filter: drop-shadow(0 18px 22px rgba(0,0,0,.16));
+      transition: transform .12s ease;
+    }
+    .starBtn:hover{ transform: translateY(-3px) scale(1.02); }
+    .starBtn:active{ transform: translateY(0px) scale(.98); }
+
+    .starLabel{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      letter-spacing:1px;
+      color: rgba(11,27,43,0.92);
+    }
+
+    /* Result overlay */
+    .result{
+      position:fixed;
+      inset:0;
+      display:grid;
+      place-items:center;
+      backdrop-filter: blur(6px);
+      z-index:20;
+    }
+    .result-card{
+      width:min(520px, 92vw);
+      padding:22px 18px;
+      border-radius:18px;
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 24px 60px rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.6);
+      text-align:center;
+    }
+    .result-card h2{
+      margin:0 0 8px;
+      font-size: clamp(24px, 3.2vw, 34px);
+    }
+    .result-card p{ margin: 6px 0; }
+    .tiny{ opacity:.8; font-size: 14px; }
+
+    .again{
+      margin-top: 12px;
+      border:0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor:pointer;
+      background: linear-gradient(180deg, #b7f2ff, #7ddfff);
+      box-shadow: 0 12px 18px rgba(0,0,0,.12);
+    }
+
+    /* Tiny hint so you know JS is working */
+    .debugDot{
+      position:fixed;
+      bottom:10px;
+      left:10px;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#00d084;
+      z-index:50;
+      opacity:.6;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Background sky -->
   <div class="scene" aria-hidden="true">
     <div class="sun"></div>
     <div class="sparkles"></div>
   </div>
 
-  <!-- Wave crash overlay (SVG) -->
-  <div class="wave-wrap" id="waveWrap" aria-hidden="true">
-    <svg class="wave-svg" viewBox="0 0 1440 500" preserveAspectRatio="none">
+  <!-- Wave crash overlay -->
+  <div class="wave-wrap" aria-hidden="true">
+    <svg class="wave-svg" viewBox="0 0 1440 600" preserveAspectRatio="none">
       <defs>
         <linearGradient id="seaGrad" x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stop-color="#2bb6c6" />
@@ -29,27 +240,32 @@
       </defs>
 
       <!-- Water mass -->
-      <path class="wave-water"
-        d="M0,320
-           C180,240 360,420 540,330
-           C720,250 900,450 1080,330
-           C1260,245 1380,320 1440,320
-           L1440,500 L0,500 Z" />
+      <path
+        d="M0,360
+           C200,260 420,500 640,380
+           C860,260 1060,540 1240,380
+           C1360,300 1420,340 1440,360
+           L1440,600 L0,600 Z"
+        fill="url(#seaGrad)"
+        opacity="0.98"
+      />
 
-      <!-- Foam band near crest -->
-      <path class="wave-foam"
-        d="M0,300
-           C180,220 360,400 540,310
-           C720,230 900,430 1080,310
-           C1260,225 1380,300 1440,300
-           L1440,360 L0,360 Z" />
+      <!-- Foam crest -->
+      <path
+        d="M0,330
+           C200,230 420,470 640,350
+           C860,230 1060,510 1240,350
+           C1360,270 1420,310 1440,330
+           L1440,420 L0,420 Z"
+        fill="url(#foamGrad)"
+        opacity="0.95"
+      />
     </svg>
   </div>
 
-  <!-- Main content -->
   <main class="content">
     <section class="board-wrap">
-      <!-- Surfboard (SVG) -->
+      <!-- Surfboard -->
       <svg class="board" viewBox="0 0 120 420" role="img" aria-label="Surfboard">
         <defs>
           <linearGradient id="boardGrad" x1="0" x2="0" y1="0" y2="1">
@@ -62,7 +278,6 @@
           </linearGradient>
         </defs>
 
-        <!-- Board outline -->
         <path d="
           M60 0
           C92 40 98 140 98 260
@@ -71,7 +286,6 @@
           C22 140 28 40 60 0 Z"
           fill="url(#boardGrad)"/>
 
-        <!-- Shine stripe -->
         <path d="
           M45 35
           C35 80 35 160 35 260
@@ -80,7 +294,6 @@
           C55 160 55 90 62 45 Z"
           fill="url(#shineGrad)" opacity="0.55"/>
 
-        <!-- Fin -->
         <path d="M58 330 C70 338 72 372 60 392 C48 372 46 338 58 330 Z"
               fill="rgba(11,27,43,0.9)"/>
       </svg>
@@ -89,22 +302,159 @@
       <p class="sub">(Answer carefully. The ocean is watching.)</p>
 
       <div class="choices" id="choices">
-        <button class="starfish yes" id="yesBtn" type="button">YES</button>
-        <button class="starfish no" id="noBtn" type="button" aria-disabled="true" tabindex="-1">NO</button>
-      </div>
+        <!-- YES starfish -->
+        <button class="starBtn" id="yesBtn" type="button" aria-label="Yes">
+          <svg viewBox="0 0 200 180" width="160" height="140" aria-hidden="true">
+            <defs>
+              <radialGradient id="yesStarGrad" cx="35%" cy="30%" r="75%">
+                <stop offset="0%" stop-color="#ffd9e4"/>
+                <stop offset="100%" stop-color="#ff7aa2"/>
+              </radialGradient>
+            </defs>
+            <path fill="url(#yesStarGrad)" d="
+              M100 8
+              L124 58
+              L178 52
+              L142 92
+              L160 148
+              L100 118
+              L40 148
+              L58 92
+              L22 52
+              L76 58 Z"/>
+          </svg>
+          <div class="starLabel">YES</div>
+        </button>
 
-      <div class="result" id="result" hidden>
-        <div class="result-card">
-          <h2>Yessss! 🏄‍♂️💘</h2>
-          <p>You’re officially my favorite human in the lineup.</p>
-          <p class="tiny">Now collect your prize (kiss / snack / surf trip). Dealer’s choice.</p>
-          <button class="again" id="againBtn" type="button">Play again</button>
-        </div>
+        <!-- NO starfish -->
+        <button class="starBtn" id="noBtn" type="button" aria-label="No" tabindex="-1" aria-disabled="true">
+          <svg viewBox="0 0 200 180" width="160" height="140" aria-hidden="true">
+            <defs>
+              <radialGradient id="noStarGrad" cx="35%" cy="30%" r="75%">
+                <stop offset="0%" stop-color="#ffe7bf"/>
+                <stop offset="100%" stop-color="#ffb35c"/>
+              </radialGradient>
+            </defs>
+            <path fill="url(#noStarGrad)" d="
+              M100 8
+              L124 58
+              L178 52
+              L142 92
+              L160 148
+              L100 118
+              L40 148
+              L58 92
+              L22 52
+              L76 58 Z"/>
+          </svg>
+          <div class="starLabel">NO</div>
+        </button>
       </div>
-
     </section>
   </main>
 
-  <script src="./script.js"></script>
+  <div class="result" id="result" hidden>
+    <div class="result-card">
+      <h2>Yessss! 🏄‍♂️💘</h2>
+      <p>You’re officially my favorite human in the lineup.</p>
+      <p class="tiny">Now collect your prize (kiss / snack / surf trip). Dealer’s choice.</p>
+      <button class="again" id="againBtn" type="button">Play again</button>
+    </div>
+  </div>
+
+  <div class="debugDot" title="JS loaded"></div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const result = document.getElementById("result");
+    const againBtn = document.getElementById("againBtn");
+    const choices = document.getElementById("choices");
+
+    yesBtn.addEventListener("click", () => {
+      result.hidden = false;
+    });
+
+    againBtn.addEventListener("click", () => {
+      result.hidden = true;
+      resetNoButton();
+    });
+
+    // --- NO button dodges ---
+    const PAD = 6;
+    const DODGE_RADIUS = 120;
+    const TELEPORT_TRIES = 30;
+
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getRect(el) {
+      return el.getBoundingClientRect();
+    }
+
+    function resetNoButton() {
+      noBtn.style.position = "relative";
+      noBtn.style.left = "0px";
+      noBtn.style.top = "0px";
+    }
+
+    function teleportNoButton(avoidX, avoidY) {
+      const box = getRect(choices);
+
+      // allow absolute positioning inside choices
+      choices.style.position = "relative";
+      noBtn.style.position = "absolute";
+
+      const w = noBtn.offsetWidth;
+      const h = noBtn.offsetHeight;
+
+      const minX = PAD;
+      const minY = PAD;
+      const maxX = Math.max(PAD, box.width - w - PAD);
+      const maxY = Math.max(PAD, box.height - h - PAD);
+
+      let best = null;
+      let bestDist = -1;
+
+      for (let i = 0; i < TELEPORT_TRIES; i++) {
+        const x = rand(minX, maxX);
+        const y = rand(minY, maxY);
+
+        const cx = box.left + x + w / 2;
+        const cy = box.top + y + h / 2;
+
+        const dx = cx - avoidX;
+        const dy = cy - avoidY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > bestDist) {
+          bestDist = dist;
+          best = { x, y };
+        }
+      }
+
+      if (!best) return;
+
+      noBtn.style.left = best.x + "px";
+      noBtn.style.top  = best.y + "px";
+    }
+
+    // dodge on approach / hover
+    noBtn.addEventListener("mouseenter", (e) => teleportNoButton(e.clientX, e.clientY));
+    noBtn.addEventListener("pointerdown", (e) => { e.preventDefault(); teleportNoButton(e.clientX, e.clientY); });
+    noBtn.addEventListener("click", (e) => e.preventDefault());
+
+    window.addEventListener("mousemove", (e) => {
+      if (!result.hidden) return;
+      const r = getRect(noBtn);
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const dx = cx - e.clientX;
+      const dy = cy - e.clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < DODGE_RADIUS) teleportNoButton(e.clientX, e.clientY);
+    });
+  </script>
 </body>
 </html>
