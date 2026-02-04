@@ -7,14 +7,23 @@
 
   <style>
     :root {
-      --bg: #071a2b;
-      --card: rgba(255,255,255,0.08);
-      --text: #eaf6ff;
-      --muted: rgba(234,246,255,0.78);
-      --accent: #ff5aa5;
-      --accent2: #4fe3c2;
-      --danger: #ff6b6b;
-      --shadow: 0 12px 40px rgba(0,0,0,0.35);
+      /* Blue background + yellow popup theme */
+      --bg1: #031628;
+      --bg2: #062a4a;
+      --bg3: #0b3a66;
+
+      --card: rgba(255, 230, 120, 0.92);   /* yellow popup */
+      --panel: rgba(255, 230, 120, 0.88);
+      --border: rgba(0,0,0,0.12);
+
+      --text: #0b1b2a;     /* dark text on yellow */
+      --muted: rgba(11, 27, 42, 0.75);
+
+      --accent: #0b3a66;   /* blue accent */
+      --accent2: #123d5a;
+      --danger: #b00020;
+
+      --shadow: 0 18px 60px rgba(0,0,0,0.40);
       --radius: 18px;
     }
 
@@ -23,31 +32,33 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color: var(--text);
       background:
-        radial-gradient(1000px 600px at 20% 10%, rgba(79,227,194,0.16), transparent 60%),
-        radial-gradient(900px 600px at 85% 20%, rgba(255,90,165,0.14), transparent 55%),
-        radial-gradient(900px 700px at 40% 90%, rgba(100,149,237,0.18), transparent 60%),
-        var(--bg);
+        radial-gradient(1200px 700px at 15% 15%, rgba(90, 190, 255, 0.16), transparent 60%),
+        radial-gradient(1200px 700px at 85% 25%, rgba(0, 120, 255, 0.14), transparent 58%),
+        radial-gradient(900px 700px at 40% 90%, rgba(0, 255, 200, 0.10), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
       min-height: 100vh;
       display: grid;
       place-items: center;
-      padding: 22px;
+      padding: 26px;
     }
 
-    .wrap { width: min(980px, 100%); }
+    .wrap {
+      width: min(980px, 100%);
+    }
 
     .card {
       background: var(--card);
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
 
     header {
-      padding: 26px 22px 18px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
+      padding: 22px 22px 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.10);
       text-align: center;
-      transition: opacity 280ms ease, transform 280ms ease;
+      transition: opacity 260ms ease, transform 260ms ease;
     }
 
     header.fading {
@@ -57,39 +68,72 @@
     }
 
     h1 {
-      margin: 0 0 10px 0;
+      margin: 0 0 8px 0;
       font-size: clamp(22px, 3vw, 34px);
       letter-spacing: 0.2px;
-      font-weight: 850;
+      font-weight: 900;
     }
 
     .subtitle {
       margin: 0 auto;
       max-width: 62ch;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.45;
       font-size: 15px;
+    }
+
+    /* “Gamey” progress dots */
+    .progress {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(11, 27, 42, 0.25);
+      border: 1px solid rgba(11, 27, 42, 0.15);
+      transition: transform 160ms ease, background 160ms ease;
+    }
+    .dot.active {
+      background: rgba(11, 58, 102, 0.85);
+      transform: scale(1.15);
+    }
+    .dot.done {
+      background: rgba(11, 58, 102, 0.55);
     }
 
     .content {
       padding: 22px;
-      display: grid;
-      place-items: center;
     }
 
+    .screen {
+      display: none;
+      width: 100%;
+    }
+    .screen.active {
+      display: block;
+    }
+
+    /* This is the key fix: hard-center the panel with equal gutters */
     .panel {
       width: min(760px, 100%);
-      background: rgba(0,0,0,0.18);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 14px;
+      margin: 0 auto;               /* <— centers it */
+      background: var(--panel);
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 16px;
       padding: 18px;
       text-align: center;
+
       transition: opacity 260ms ease, transform 260ms ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
     }
 
     .panel.fading {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(10px);
       pointer-events: none;
     }
 
@@ -111,32 +155,44 @@
 
     button {
       appearance: none;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(11, 27, 42, 0.22);
+      background: rgba(255,255,255,0.35);
       color: var(--text);
       padding: 10px 14px;
       border-radius: 12px;
-      font-weight: 650;
+      font-weight: 750;
       cursor: pointer;
-      transition: transform 0.08s ease, background 0.2s ease, border 0.2s ease;
+      transition: transform 0.08s ease, background 0.2s ease;
       user-select: none;
-      min-width: 160px;
+      min-width: 170px;
     }
-
-    button:hover { transform: translateY(-1px); background: rgba(255,255,255,0.14); }
+    button:hover { transform: translateY(-1px); background: rgba(255,255,255,0.50); }
     button:active { transform: translateY(0px) scale(0.99); }
 
-    .primary { border-color: rgba(255,90,165,0.55); background: rgba(255,90,165,0.20); }
-    .primary:hover { background: rgba(255,90,165,0.28); }
+    .primary {
+      border-color: rgba(11, 58, 102, 0.55);
+      background: rgba(11, 58, 102, 0.18);
+    }
+    .primary:hover { background: rgba(11, 58, 102, 0.25); }
 
-    .good { border-color: rgba(79,227,194,0.55); background: rgba(79,227,194,0.18); }
-    .good:hover { background: rgba(79,227,194,0.25); }
+    .good {
+      border-color: rgba(0, 120, 120, 0.55);
+      background: rgba(0, 120, 120, 0.18);
+    }
+    .good:hover { background: rgba(0, 120, 120, 0.25); }
 
-    .danger { border-color: rgba(255,107,107,0.55); background: rgba(255,107,107,0.18); }
-    .danger:hover { background: rgba(255,107,107,0.25); }
+    .danger {
+      border-color: rgba(176, 0, 32, 0.55);
+      background: rgba(176, 0, 32, 0.16);
+    }
+    .danger:hover { background: rgba(176, 0, 32, 0.22); }
 
-    .status { font-weight: 750; margin-top: 12px; min-height: 1.2em; }
-    .status.ok { color: var(--accent2); }
+    .status {
+      font-weight: 800;
+      margin-top: 12px;
+      min-height: 1.2em;
+    }
+    .status.ok { color: #0b6b52; }
     .status.no { color: var(--danger); }
 
     img.photo {
@@ -144,8 +200,8 @@
       height: 340px;
       object-fit: cover;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(0,0,0,0.12);
+      background: rgba(0,0,0,0.08);
       margin-top: 14px;
     }
     @media (max-width: 860px) { img.photo { height: 260px; } }
@@ -154,8 +210,8 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: 13px;
       line-height: 1.55;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.40);
+      border: 1px solid rgba(0,0,0,0.12);
       border-radius: 14px;
       padding: 12px;
       white-space: pre;
@@ -169,24 +225,21 @@
       box-sizing: border-box;
       padding: 10px 12px;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(0,0,0,0.14);
+      background: rgba(255,255,255,0.55);
       color: var(--text);
       font-size: 14px;
       outline: none;
       margin-top: 12px;
     }
 
-    .screen { display: none; width: 100%; }
-    .screen.active { display: block; width: 100%; }
-
     .stage {
       position: relative;
       width: 100%;
       height: 340px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.20);
+      border: 1px solid rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.30);
       overflow: hidden;
       padding: 14px;
       margin-top: 14px;
@@ -194,7 +247,12 @@
       place-items: center;
     }
 
-    .floating { position: absolute; left: 62%; top: 62%; min-width: 160px; }
+    .floating {
+      position: absolute;
+      left: 62%;
+      top: 62%;
+      min-width: 170px;
+    }
 
     .photos {
       display: grid;
@@ -208,8 +266,8 @@
       height: 170px;
       object-fit: cover;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(0,0,0,0.12);
+      background: rgba(0,0,0,0.08);
     }
     @media (max-width: 860px) {
       .photos { grid-template-columns: 1fr; }
@@ -219,7 +277,7 @@
     .footer {
       text-align:center;
       margin-top: 14px;
-      color: var(--muted);
+      color: rgba(234,246,255,0.78);
       font-size: 14px;
     }
   </style>
@@ -230,19 +288,24 @@
     <div class="card">
       <header id="appHeader">
         <h1 id="titleText">For my marine biologist boyfriend</h1>
-        <p class="subtitle" id="subtitleText">
-          <!-- EDIT THIS: this is ONLY shown on the start screen -->
-          Complete the tasks to unlock the final message.
-        </p>
+        <p class="subtitle" id="subtitleText">Complete the tasks to unlock the final message.</p>
+
+        <!-- progress dots (hidden on start screen, shown once game begins) -->
+        <div class="progress" id="progress" style="display:none;">
+          <div class="dot" data-step="coral"></div>
+          <div class="dot" data-step="nick"></div>
+          <div class="dot" data-step="code"></div>
+          <div class="dot" data-step="val"></div>
+          <div class="dot" data-step="love"></div>
+        </div>
       </header>
 
       <div class="content">
 
-        <!-- SCREEN 0: Start -->
+        <!-- SCREEN: Start -->
         <section id="screen-start" class="screen active">
           <div class="panel" id="panel-start">
             <p class="hint">
-              <!-- EDIT THIS: start screen body -->
               Rules: no googling, no bargaining with the interface, and do not forget the underscores.
             </p>
             <div class="btns">
@@ -251,7 +314,7 @@
           </div>
         </section>
 
-        <!-- SCREEN 1: Coral ID quiz -->
+        <!-- SCREEN: Task 1 (Coral) -->
         <section id="screen-coral" class="screen">
           <div class="panel" id="panel-coral">
             <p class="hint" id="coralPrompt">Identify the coral.</p>
@@ -264,20 +327,9 @@
           </div>
         </section>
 
-        <!-- SCREEN 2: Surfing task -->
-        <section id="screen-surf" class="screen">
-          <div class="panel" id="panel-surf">
-            <p class="hint" id="surfPrompt">Surf check. Choose the correct answer.</p>
-            <div class="codebox" id="surfQuestion"></div>
-            <div id="surfChoices" class="btns"></div>
-            <div id="surfStatus" class="status"></div>
-            <div class="btns">
-              <button id="skipSurf" class="danger" type="button">Skip</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- SCREEN 3: Nicknames task -->
+        <!-- SCREEN: Task 2 (Placeholder: you will replace this later)
+             Remove this entire screen if you don’t want it, or rename it and add your new task.
+        -->
         <section id="screen-nick" class="screen">
           <div class="panel" id="panel-nick">
             <p class="hint" id="nickPrompt">Pick the correct answer.</p>
@@ -290,7 +342,7 @@
           </div>
         </section>
 
-        <!-- SCREEN 4: R code task -->
+        <!-- SCREEN: Task 3 (R code) -->
         <section id="screen-code" class="screen">
           <div class="panel" id="panel-code">
             <p class="hint" id="codePrompt">Finish the R code. Do not forget the underscores.</p>
@@ -304,7 +356,7 @@
           </div>
         </section>
 
-        <!-- SCREEN 5: Valentine question -->
+        <!-- SCREEN: Valentine -->
         <section id="screen-val" class="screen">
           <div class="panel" id="panel-val">
             <p class="hint" id="valPrompt">Will you be my Valentine?</p>
@@ -320,16 +372,13 @@
           </div>
         </section>
 
-        <!-- SCREEN 6: Love message -->
+        <!-- SCREEN: Love -->
         <section id="screen-love" class="screen">
           <div class="panel" id="panel-love">
             <div id="loveText" style="font-size: 18px; line-height: 1.55;"></div>
 
             <div class="photos">
-              <!-- EDIT THESE:
-                   1) Put your images in an /images/ folder in the repo
-                   2) Replace filenames below (or delete extra <img> tags)
-              -->
+              <!-- Put images in /images/ and update filenames below -->
               <img src="images/us1.jpg" alt="Photo 1" />
               <img src="images/us2.jpg" alt="Photo 2" />
               <img src="images/fiji.jpg" alt="Photo 3" />
@@ -349,22 +398,21 @@
 
   <script>
     /* ============================================================
-      EDIT: Level titles (these replace the header after Start)
+      Level titles (header changes after Start)
     ============================================================ */
     const LEVEL_TITLES = {
       coral: { title: "Task 1: Coral ID", subtitle: "Identify the coral." },
-      surf:  { title: "Task 2: Surf Check", subtitle: "Choose the correct answer." },
-      nick:  { title: "Task 3: Nicknames", subtitle: "Pick the real one." },
-      code:  { title: "Task 4: RStudio", subtitle: "Finish the code. Do not forget the underscores." },
+      nick:  { title: "Task 2: Your Replacement Task", subtitle: "Replace this task with your own." },
+      code:  { title: "Task 3: RStudio", subtitle: "Finish the code. Do not forget the underscores." },
       val:   { title: "Final Task", subtitle: "This one is easy. Allegedly." },
       love:  { title: "Unlocked", subtitle: "" }
     };
 
     /* ============================================================
-      EDIT: Coral quiz content
+      Coral quiz content
       - Put coral images in /images/
       - Update src filenames
-      - Include his favourite here if you want
+      - Make sure filenames match exactly (case-sensitive on GitHub Pages)
     ============================================================ */
     const CORAL_QUIZ = [
       {
@@ -376,44 +424,18 @@
         src: "images/coral2.jpg",
         correct: "Pocillopora damicornis",
         options: ["Pocillopora damicornis", "Acropora tenuis", "Favia sp.", "Stylophora pistillata"]
-      },
-      {
-        src: "images/coral3.jpg",
-        correct: "Porites lobata",
-        options: ["Porites lobata", "Acropora millepora", "Montipora capricornis", "Goniastrea sp."]
       }
     ];
 
     /* ============================================================
-      EDIT: Surf task
-      - Make it inside-jokey
-      - Keep one option exactly equal to `correct`
-    ============================================================ */
-    const SURF_TASK = {
-      question: [
-        "Scenario:",
-        "Waist-to-chest high, punchy beach break, a bit of wind on it.",
-        "You want speed but also some control.",
-        "",
-        "Pick the best call:"
-      ].join("\n"),
-      correct: "Take the board that paddles easiest and go slightly bigger fins for hold.",
-      options: [
-        "Take the board that paddles easiest and go slightly bigger fins for hold.",
-        "Take the smallest board possible and refuse to paddle.",
-        "Wax is optional. Sand is inevitable.",
-        "Ride it switch-stance only. The ocean respects chaos."
-      ]
-    };
-
-    /* ============================================================
-      EDIT: Nicknames task
-      - Replace EDIT_ME entries with real/fake options
+      Nicknames task (placeholder)
+      - Replace EDIT_ME_* values
+      - Or replace this entire screen with your new task logic
     ============================================================ */
     const NICK_TASK = {
       question: [
-        "One of these is a real nickname you've used for me.",
-        "Pick the correct one."
+        "Replace this task with your own question.",
+        "For now: pick the correct nickname."
       ].join("\n"),
       correct: "EDIT_ME_REAL_NICKNAME",
       options: [
@@ -425,9 +447,8 @@
     };
 
     /* ============================================================
-      EDIT: R code task (multiple accepted answers)
-      - Replace the snippet and accepted lines
-      - Checker is whitespace-tolerant and accepts optional dplyr:: prefix
+      R code task (multiple acceptable answers)
+      - Replace snippet and accepted lines
     ============================================================ */
     const R_SNIPPET = `
 library(dplyr)
@@ -438,12 +459,10 @@ me <- tibble(
 )
 
 me %>%
-  ??? %>%                             # fill this line (do not forget the underscores)
+  ??? %>%                             # fill this line (underscores matter)
   arrange(desc(score))
 `.trim();
 
-    // Put acceptable answers for the ??? line here.
-    // Any ONE match passes.
     const CODE_ACCEPTED = [
       'mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_1")',
       'mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_2")',
@@ -453,15 +472,11 @@ me %>%
       'dplyr::mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_3")'
     ];
 
-    /* ============================================================
-      EDIT: Final love message
-      - Write in HTML (paragraph tags etc.)
-    ============================================================ */
     const LOVE_MESSAGE_HTML = `
       <p><b>Good.</b></p>
       <p>
         I love doing life with you. The reef talk, the surf talk, the code talk, the everything.
-        Thanks for being you, and for teaching me so much (especially pipes).
+        Thanks for being you, and for teaching me so much.
       </p>
       <p>
         I’m really happy you’re my partner. I can’t wait to celebrate together in Fiji soon.
@@ -475,11 +490,11 @@ me %>%
     const appHeader = document.getElementById("appHeader");
     const titleText = document.getElementById("titleText");
     const subtitleText = document.getElementById("subtitleText");
+    const progress = document.getElementById("progress");
 
     const screens = {
       start: document.getElementById("screen-start"),
       coral: document.getElementById("screen-coral"),
-      surf:  document.getElementById("screen-surf"),
       nick:  document.getElementById("screen-nick"),
       code:  document.getElementById("screen-code"),
       val:   document.getElementById("screen-val"),
@@ -492,6 +507,20 @@ me %>%
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    function setProgress(activeKey) {
+      const dots = [...document.querySelectorAll(".dot")];
+      dots.forEach(d => {
+        const step = d.getAttribute("data-step");
+        d.classList.remove("active");
+        if (step === activeKey) d.classList.add("active");
+      });
+    }
+
+    function markDone(stepKey) {
+      const dot = document.querySelector(`.dot[data-step="${stepKey}"]`);
+      if (dot) dot.classList.add("done");
+    }
+
     function shuffle(arr) {
       const a = [...arr];
       for (let i = a.length - 1; i > 0; i--) {
@@ -502,14 +531,10 @@ me %>%
     }
 
     function normalizeLine(s) {
-      return s
-        .trim()
-        .replace(/;$/, "")
-        .replace(/\s+/g, " ");
+      return s.trim().replace(/;$/, "").replace(/\s+/g, " ");
     }
 
     function equalsLoose(a, b) {
-      // Treat mutate(...) and dplyr::mutate(...) as equivalent
       const na = normalizeLine(a).replace(/^dplyr::/i, "");
       const nb = normalizeLine(b).replace(/^dplyr::/i, "");
       return na === nb;
@@ -519,44 +544,35 @@ me %>%
       const cfg = LEVEL_TITLES[levelKey];
       if (!cfg) return;
 
-      // Fade out header
       appHeader.classList.add("fading");
-      await new Promise(r => setTimeout(r, 260));
-
-      // Swap text
+      await new Promise(r => setTimeout(r, 240));
       titleText.textContent = cfg.title;
       subtitleText.textContent = cfg.subtitle || "";
-
-      // Fade back in
       appHeader.classList.remove("fading");
-      await new Promise(r => setTimeout(r, 80));
+      await new Promise(r => setTimeout(r, 60));
+
+      setProgress(levelKey);
     }
 
     async function transitionPanel(panelEl, nextKey, headerLevelKey) {
-      // Fade out panel
       panelEl.classList.add("fading");
       await new Promise(r => setTimeout(r, 240));
 
       if (headerLevelKey) await transitionHeaderTo(headerLevelKey);
 
-      // Switch screen
       showScreen(nextKey);
 
-      // Fade in next screen panel (if present)
       const nextPanel = document.querySelector(`#screen-${nextKey} .panel`);
       if (nextPanel) {
         nextPanel.classList.add("fading");
-        // next tick
-        requestAnimationFrame(() => {
-          nextPanel.classList.remove("fading");
-        });
+        requestAnimationFrame(() => nextPanel.classList.remove("fading"));
       }
     }
 
-    /* ------------------ Start -> Task 1 ------------------ */
+    /* ------------------ Start -> Coral ------------------ */
     document.getElementById("startBtn").addEventListener("click", async () => {
-      const startPanel = document.getElementById("panel-start");
-      await transitionPanel(startPanel, "coral", "coral");
+      progress.style.display = "flex";   // show progress once game begins
+      await transitionPanel(document.getElementById("panel-start"), "coral", "coral");
       renderCoralQuiz();
     });
 
@@ -573,7 +589,7 @@ me %>%
 
       coralImg.src = q.src;
       coralImg.onerror = () => {
-        coralStatus.textContent = "Image not found. Check the file name/path in CORAL_QUIZ.src.";
+        coralStatus.textContent = "Image not found. Check CORAL_QUIZ.src and filename casing.";
         coralStatus.className = "status no";
       };
 
@@ -592,13 +608,13 @@ me %>%
       if (opt === q.correct) {
         coralStatus.textContent = "Correct.";
         coralStatus.className = "status ok";
-
-        await new Promise(r => setTimeout(r, 450));
+        await new Promise(r => setTimeout(r, 420));
         coralIndex++;
 
         if (coralIndex >= CORAL_QUIZ.length) {
-          await transitionPanel(document.getElementById("panel-coral"), "surf", "surf");
-          renderSurfTask();
+          markDone("coral");
+          await transitionPanel(document.getElementById("panel-coral"), "nick", "nick");
+          renderNickTask();
         } else {
           renderCoralQuiz();
         }
@@ -609,47 +625,12 @@ me %>%
     }
 
     document.getElementById("skipCoral").addEventListener("click", async () => {
-      await transitionPanel(document.getElementById("panel-coral"), "surf", "surf");
-      renderSurfTask();
-    });
-
-    /* ------------------ Task 2: Surfing ------------------ */
-    const surfQuestion = document.getElementById("surfQuestion");
-    const surfChoices = document.getElementById("surfChoices");
-    const surfStatus = document.getElementById("surfStatus");
-
-    function renderSurfTask() {
-      surfStatus.textContent = "";
-      surfStatus.className = "status";
-      surfQuestion.textContent = SURF_TASK.question;
-
-      surfChoices.innerHTML = "";
-      shuffle(SURF_TASK.options).forEach(opt => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = opt;
-        btn.addEventListener("click", async () => {
-          if (opt === SURF_TASK.correct) {
-            surfStatus.textContent = "Correct.";
-            surfStatus.className = "status ok";
-            await new Promise(r => setTimeout(r, 450));
-            await transitionPanel(document.getElementById("panel-surf"), "nick", "nick");
-            renderNickTask();
-          } else {
-            surfStatus.textContent = "Incorrect. Try again.";
-            surfStatus.className = "status no";
-          }
-        });
-        surfChoices.appendChild(btn);
-      });
-    }
-
-    document.getElementById("skipSurf").addEventListener("click", async () => {
-      await transitionPanel(document.getElementById("panel-surf"), "nick", "nick");
+      markDone("coral");
+      await transitionPanel(document.getElementById("panel-coral"), "nick", "nick");
       renderNickTask();
     });
 
-    /* ------------------ Task 3: Nicknames ------------------ */
+    /* ------------------ Task 2: Nicknames placeholder ------------------ */
     const nickQuestion = document.getElementById("nickQuestion");
     const nickChoices = document.getElementById("nickChoices");
     const nickStatus = document.getElementById("nickStatus");
@@ -668,7 +649,8 @@ me %>%
           if (opt === NICK_TASK.correct) {
             nickStatus.textContent = "Correct.";
             nickStatus.className = "status ok";
-            await new Promise(r => setTimeout(r, 450));
+            await new Promise(r => setTimeout(r, 420));
+            markDone("nick");
             await transitionPanel(document.getElementById("panel-nick"), "code", "code");
             renderCodeTask();
           } else {
@@ -681,11 +663,12 @@ me %>%
     }
 
     document.getElementById("skipNick").addEventListener("click", async () => {
+      markDone("nick");
       await transitionPanel(document.getElementById("panel-nick"), "code", "code");
       renderCodeTask();
     });
 
-    /* ------------------ Task 4: R code ------------------ */
+    /* ------------------ Task 3: R code ------------------ */
     const rSnippet = document.getElementById("rSnippet");
     const codeInput = document.getElementById("codeInput");
     const codeStatus = document.getElementById("codeStatus");
@@ -709,16 +692,18 @@ me %>%
       if (matched) {
         codeStatus.textContent = "Pass.";
         codeStatus.className = "status ok";
-        await new Promise(r => setTimeout(r, 450));
+        await new Promise(r => setTimeout(r, 420));
+        markDone("code");
         await transitionPanel(document.getElementById("panel-code"), "val", "val");
         moveNoButton();
       } else {
-        codeStatus.textContent = "Not quite. Hint: underscores matter.";
+        codeStatus.textContent = "Not quite. Underscores matter.";
         codeStatus.className = "status no";
       }
     });
 
     document.getElementById("skipCode").addEventListener("click", async () => {
+      markDone("code");
       await transitionPanel(document.getElementById("panel-code"), "val", "val");
       moveNoButton();
     });
@@ -755,28 +740,31 @@ me %>%
     noBtn.addEventListener("click", (e) => { e.preventDefault(); moveNoButton(); });
 
     yesBtn.addEventListener("click", async () => {
+      markDone("val");
       document.getElementById("loveText").innerHTML = LOVE_MESSAGE_HTML;
       await transitionPanel(document.getElementById("panel-val"), "love", "love");
+      markDone("love");
     });
 
     /* ------------------ Replay ------------------ */
     document.getElementById("replay").addEventListener("click", async () => {
       coralIndex = 0;
 
-      // Reset header back to the start text
+      // reset header to start message and hide progress
       appHeader.classList.add("fading");
-      await new Promise(r => setTimeout(r, 260));
+      await new Promise(r => setTimeout(r, 240));
       titleText.textContent = "For my marine biologist boyfriend";
       subtitleText.textContent = "Complete the tasks to unlock the final message.";
       appHeader.classList.remove("fading");
 
+      progress.style.display = "none";
+      document.querySelectorAll(".dot").forEach(d => d.classList.remove("active", "done"));
+
       showScreen("start");
-      // Ensure start panel is visible
-      const p = document.getElementById("panel-start");
-      p.classList.remove("fading");
+      document.getElementById("panel-start").classList.remove("fading");
     });
 
-    // Place No randomly initially (in case the user jumps screens)
+    // initial placement
     moveNoButton();
   </script>
 </body>
