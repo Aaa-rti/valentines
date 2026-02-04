@@ -33,7 +33,7 @@
       padding: 22px;
     }
 
-    .wrap { width: min(920px, 100%); }
+    .wrap { width: min(980px, 100%); }
 
     .card {
       background: var(--card);
@@ -44,31 +44,71 @@
     }
 
     header {
-      padding: 22px 22px 14px;
+      padding: 26px 22px 18px;
       border-bottom: 1px solid rgba(255,255,255,0.12);
+      text-align: center;
+      transition: opacity 280ms ease, transform 280ms ease;
+    }
+
+    header.fading {
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
     }
 
     h1 {
-      margin: 0 0 6px 0;
-      font-size: clamp(22px, 3vw, 32px);
+      margin: 0 0 10px 0;
+      font-size: clamp(22px, 3vw, 34px);
       letter-spacing: 0.2px;
-      font-weight: 800;
+      font-weight: 850;
     }
 
-    .subtitle { margin: 0; color: var(--muted); line-height: 1.4; }
+    .subtitle {
+      margin: 0 auto;
+      max-width: 62ch;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 15px;
+    }
 
-    .content { padding: 22px; display: grid; gap: 16px; }
+    .content {
+      padding: 22px;
+      display: grid;
+      place-items: center;
+    }
 
     .panel {
+      width: min(760px, 100%);
       background: rgba(0,0,0,0.18);
       border: 1px solid rgba(255,255,255,0.10);
       border-radius: 14px;
-      padding: 16px;
+      padding: 18px;
+      text-align: center;
+      transition: opacity 260ms ease, transform 260ms ease;
     }
 
-    .hint { color: var(--muted); font-size: 14px; line-height: 1.4; }
+    .panel.fading {
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+    }
 
-    .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .hint {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      margin: 0 auto;
+      max-width: 62ch;
+    }
+
+    .btns {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
     button {
       appearance: none;
       border: 1px solid rgba(255,255,255,0.18);
@@ -80,7 +120,9 @@
       cursor: pointer;
       transition: transform 0.08s ease, background 0.2s ease, border 0.2s ease;
       user-select: none;
+      min-width: 160px;
     }
+
     button:hover { transform: translateY(-1px); background: rgba(255,255,255,0.14); }
     button:active { transform: translateY(0px) scale(0.99); }
 
@@ -93,34 +135,37 @@
     .danger { border-color: rgba(255,107,107,0.55); background: rgba(255,107,107,0.18); }
     .danger:hover { background: rgba(255,107,107,0.25); }
 
-    .status { font-weight: 750; margin-top: 10px; }
+    .status { font-weight: 750; margin-top: 12px; min-height: 1.2em; }
     .status.ok { color: var(--accent2); }
     .status.no { color: var(--danger); }
 
     img.photo {
       width: 100%;
-      height: 320px;
+      height: 340px;
       object-fit: cover;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(0,0,0,0.25);
+      margin-top: 14px;
     }
     @media (max-width: 860px) { img.photo { height: 260px; } }
 
     .codebox {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.55;
       background: rgba(0,0,0,0.35);
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 14px;
       padding: 12px;
       white-space: pre;
       overflow-x: auto;
+      text-align: left;
+      margin-top: 14px;
     }
 
     input[type="text"] {
-      width: 100%;
+      width: min(680px, 100%);
       box-sizing: border-box;
       padding: 10px 12px;
       border-radius: 12px;
@@ -129,31 +174,38 @@
       color: var(--text);
       font-size: 14px;
       outline: none;
+      margin-top: 12px;
     }
 
-    .screen { display: none; }
-    .screen.active { display: block; }
+    .screen { display: none; width: 100%; }
+    .screen.active { display: block; width: 100%; }
 
     .stage {
       position: relative;
+      width: 100%;
       height: 340px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(0,0,0,0.20);
       overflow: hidden;
       padding: 14px;
+      margin-top: 14px;
+      display: grid;
+      place-items: center;
     }
-    .floating { position: absolute; left: 60%; top: 55%; }
+
+    .floating { position: absolute; left: 62%; top: 62%; min-width: 160px; }
 
     .photos {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 14px;
+      width: 100%;
     }
     .photos img {
       width: 100%;
-      height: 160px;
+      height: 170px;
       object-fit: cover;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.12);
@@ -163,17 +215,24 @@
       .photos { grid-template-columns: 1fr; }
       .photos img { height: 220px; }
     }
+
+    .footer {
+      text-align:center;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
     <div class="card">
-      <header>
-        <h1>For my coder, marine biologist boyfriend...</h1>
-        <p class="subtitle" id="topSubtitle">
-          <!-- EDIT THIS: intro line shown on the start screen -->
-          I made you a small game. Complete the tasks to unlock the final message.
+      <header id="appHeader">
+        <h1 id="titleText">For my marine biologist boyfriend</h1>
+        <p class="subtitle" id="subtitleText">
+          <!-- EDIT THIS: this is ONLY shown on the start screen -->
+          Complete the tasks to unlock the final message.
         </p>
       </header>
 
@@ -181,11 +240,11 @@
 
         <!-- SCREEN 0: Start -->
         <section id="screen-start" class="screen active">
-          <div class="panel">
-            <div class="hint">
+          <div class="panel" id="panel-start">
+            <p class="hint">
               <!-- EDIT THIS: start screen body -->
-              Rules: no googling, no arguing with the UI, and absolutely no pretending you don't know what an underscore is.
-            </div>
+              Rules: no googling, no bargaining with the interface, and do not forget the underscores.
+            </p>
             <div class="btns">
               <button id="startBtn" class="primary" type="button">Start</button>
             </div>
@@ -194,20 +253,12 @@
 
         <!-- SCREEN 1: Coral ID quiz -->
         <section id="screen-coral" class="screen">
-          <div class="panel">
-            <div class="hint" id="coralPrompt">
-              <!-- EDIT THIS: coral task prompt -->
-              Task 1: Identify the coral.
-            </div>
-
-            <div style="margin-top:12px">
-              <img id="coralImg" class="photo" src="" alt="Coral photo" />
-            </div>
-
+          <div class="panel" id="panel-coral">
+            <p class="hint" id="coralPrompt">Identify the coral.</p>
+            <img id="coralImg" class="photo" src="" alt="Coral photo" />
             <div id="coralChoices" class="btns"></div>
             <div id="coralStatus" class="status"></div>
-
-            <div class="btns" style="margin-top:14px">
+            <div class="btns">
               <button id="skipCoral" class="danger" type="button">Skip</button>
             </div>
           </div>
@@ -215,35 +266,25 @@
 
         <!-- SCREEN 2: Surfing task -->
         <section id="screen-surf" class="screen">
-          <div class="panel">
-            <div class="hint" id="surfPrompt">
-              <!-- EDIT THIS: surfing task prompt -->
-              Task 2: Surf check. Choose the correct answer.
-            </div>
-
+          <div class="panel" id="panel-surf">
+            <p class="hint" id="surfPrompt">Surf check. Choose the correct answer.</p>
             <div class="codebox" id="surfQuestion"></div>
             <div id="surfChoices" class="btns"></div>
             <div id="surfStatus" class="status"></div>
-
-            <div class="btns" style="margin-top:14px">
+            <div class="btns">
               <button id="skipSurf" class="danger" type="button">Skip</button>
             </div>
           </div>
         </section>
 
-        <!-- SCREEN 3: Nicknames / about-you quiz -->
+        <!-- SCREEN 3: Nicknames task -->
         <section id="screen-nick" class="screen">
-          <div class="panel">
-            <div class="hint" id="nickPrompt">
-              <!-- EDIT THIS: nickname task prompt -->
-              Task 3: Nickname audit. Pick the real one.
-            </div>
-
+          <div class="panel" id="panel-nick">
+            <p class="hint" id="nickPrompt">Pick the correct answer.</p>
             <div class="codebox" id="nickQuestion"></div>
             <div id="nickChoices" class="btns"></div>
             <div id="nickStatus" class="status"></div>
-
-            <div class="btns" style="margin-top:14px">
+            <div class="btns">
               <button id="skipNick" class="danger" type="button">Skip</button>
             </div>
           </div>
@@ -251,47 +292,29 @@
 
         <!-- SCREEN 4: R code task -->
         <section id="screen-code" class="screen">
-          <div class="panel">
-            <div class="hint" id="codePrompt">
-              <!-- EDIT THIS: code task prompt -->
-              Task 4: Finish the R code. Do not forget the underscores.
-            </div>
-
+          <div class="panel" id="panel-code">
+            <p class="hint" id="codePrompt">Finish the R code. Do not forget the underscores.</p>
             <div class="codebox" id="rSnippet"></div>
-
-            <div style="margin-top:10px">
-              <input id="codeInput" type="text" placeholder="Type the missing R line here" />
-            </div>
-
+            <input id="codeInput" type="text" placeholder="Type the missing R line here" />
             <div class="btns">
               <button id="checkCode" class="good" type="button">Check</button>
               <button id="skipCode" class="danger" type="button">Skip</button>
             </div>
-
             <div id="codeStatus" class="status"></div>
           </div>
         </section>
 
         <!-- SCREEN 5: Valentine question -->
         <section id="screen-val" class="screen">
-          <div class="panel">
-            <div class="hint" id="valPrompt">
-              <!-- EDIT THIS: valentine question -->
-              Final task: Will you be my Valentine?
-            </div>
-
+          <div class="panel" id="panel-val">
+            <p class="hint" id="valPrompt">Will you be my Valentine?</p>
             <div class="stage" id="stage">
-              <div style="max-width: 520px; margin-top: 10px;">
-                <div class="hint" id="valSubPrompt">
-                  <!-- EDIT THIS: small subtext -->
-                  Select your answer.
-                </div>
-
-                <div class="btns" style="margin-top:14px">
+              <div style="text-align:center; max-width: 60ch;">
+                <p class="hint" id="valSubPrompt">Select your answer.</p>
+                <div class="btns">
                   <button id="yesBtn" class="primary" type="button">Yes</button>
                 </div>
               </div>
-
               <button id="noBtn" class="danger floating" type="button">No</button>
             </div>
           </div>
@@ -299,20 +322,20 @@
 
         <!-- SCREEN 6: Love message -->
         <section id="screen-love" class="screen">
-          <div class="panel">
+          <div class="panel" id="panel-love">
             <div id="loveText" style="font-size: 18px; line-height: 1.55;"></div>
 
             <div class="photos">
               <!-- EDIT THESE:
                    1) Put your images in an /images/ folder in the repo
-                   2) Replace the filenames below (or delete extra <img> tags)
+                   2) Replace filenames below (or delete extra <img> tags)
               -->
               <img src="images/us1.jpg" alt="Photo 1" />
               <img src="images/us2.jpg" alt="Photo 2" />
               <img src="images/fiji.jpg" alt="Photo 3" />
             </div>
 
-            <div class="btns" style="margin-top: 14px;">
+            <div class="btns">
               <button id="replay" class="good" type="button">Replay</button>
             </div>
           </div>
@@ -321,19 +344,27 @@
       </div>
     </div>
 
-    <p class="hint" style="text-align:center; margin-top: 14px;">
-      <!-- EDIT THIS: footer line -->
-      Built for one specific marine biologist.
-    </p>
+    <div class="footer">Built for one specific marine biologist</div>
   </div>
 
   <script>
     /* ============================================================
-      EDIT SECTION A: Coral quiz content
+      EDIT: Level titles (these replace the header after Start)
+    ============================================================ */
+    const LEVEL_TITLES = {
+      coral: { title: "Task 1: Coral ID", subtitle: "Identify the coral." },
+      surf:  { title: "Task 2: Surf Check", subtitle: "Choose the correct answer." },
+      nick:  { title: "Task 3: Nicknames", subtitle: "Pick the real one." },
+      code:  { title: "Task 4: RStudio", subtitle: "Finish the code. Do not forget the underscores." },
+      val:   { title: "Final Task", subtitle: "This one is easy. Allegedly." },
+      love:  { title: "Unlocked", subtitle: "" }
+    };
+
+    /* ============================================================
+      EDIT: Coral quiz content
       - Put coral images in /images/
-      - Replace src paths with your filenames
-      - Add/remove quiz entries as you like
-      - If you want his favourite: set correct: "Acropora loripes" for one entry
+      - Update src filenames
+      - Include his favourite here if you want
     ============================================================ */
     const CORAL_QUIZ = [
       {
@@ -354,10 +385,9 @@
     ];
 
     /* ============================================================
-      EDIT SECTION B: Surfing task
-      - Make it as inside-jokey as you want
-      - Keep one option exactly matching `correct`
-      - You can add more tasks by copying the same structure and chaining screens
+      EDIT: Surf task
+      - Make it inside-jokey
+      - Keep one option exactly equal to `correct`
     ============================================================ */
     const SURF_TASK = {
       question: [
@@ -371,14 +401,14 @@
       options: [
         "Take the board that paddles easiest and go slightly bigger fins for hold.",
         "Take the smallest board possible and refuse to paddle.",
-        "Wax is optional. Commitment is optional. Sand is inevitable.",
+        "Wax is optional. Sand is inevitable.",
         "Ride it switch-stance only. The ocean respects chaos."
       ]
     };
 
     /* ============================================================
-      EDIT SECTION C: Nicknames / about-you task
-      - If you want multiple nickname questions, turn this into an array like CORAL_QUIZ
+      EDIT: Nicknames task
+      - Replace EDIT_ME entries with real/fake options
     ============================================================ */
     const NICK_TASK = {
       question: [
@@ -395,42 +425,37 @@
     };
 
     /* ============================================================
-      EDIT SECTION D: R code task (multiple acceptable answers)
-      - Replace the snippet to match your vibe
-      - Add multiple acceptable lines in CODE_ACCEPTED
-      - The checker is forgiving about whitespace, trailing semicolons, and `dplyr::` prefixes
+      EDIT: R code task (multiple accepted answers)
+      - Replace the snippet and accepted lines
+      - Checker is whitespace-tolerant and accepts optional dplyr:: prefix
     ============================================================ */
     const R_SNIPPET = `
 library(dplyr)
 
 me <- tibble(
-  trait = c("kind", "funny", "brilliant"),
+  thing_you_like_about_me = c("EDIT_ME_1", "EDIT_ME_2", "EDIT_ME_3"),
   score = c(100, 100, 100)
 )
 
 me %>%
-  ??? %>%                             # fill this line (do not forget underscores)
+  ??? %>%                             # fill this line (do not forget the underscores)
   arrange(desc(score))
 `.trim();
 
-    // Put the line(s) you want him to type for ??? below.
-    // He can match ANY ONE of these to pass.
-    // Tips:
-    // - Include a version with `dplyr::mutate(...)` if he tends to type it
-    // - Include a version with different column names if you change the snippet
+    // Put acceptable answers for the ??? line here.
+    // Any ONE match passes.
     const CODE_ACCEPTED = [
-      'mutate(favourite_thing = trait == "kind")',
-      'mutate(favourite_thing = trait == "funny")',
-      'mutate(favourite_thing = trait == "brilliant")',
-      'dplyr::mutate(favourite_thing = trait == "kind")',
-      'dplyr::mutate(favourite_thing = trait == "funny")',
-      'dplyr::mutate(favourite_thing = trait == "brilliant")'
+      'mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_1")',
+      'mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_2")',
+      'mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_3")',
+      'dplyr::mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_1")',
+      'dplyr::mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_2")',
+      'dplyr::mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_3")'
     ];
 
     /* ============================================================
-      EDIT SECTION E: Final love message
-      - Write whatever you want in HTML
-      - Keep it short or make it a whole letter
+      EDIT: Final love message
+      - Write in HTML (paragraph tags etc.)
     ============================================================ */
     const LOVE_MESSAGE_HTML = `
       <p><b>Good.</b></p>
@@ -446,7 +471,11 @@ me %>%
       </p>
     `;
 
-    /* ------------------ Helpers + state ------------------ */
+    /* ------------------ DOM refs ------------------ */
+    const appHeader = document.getElementById("appHeader");
+    const titleText = document.getElementById("titleText");
+    const subtitleText = document.getElementById("subtitleText");
+
     const screens = {
       start: document.getElementById("screen-start"),
       coral: document.getElementById("screen-coral"),
@@ -476,29 +505,63 @@ me %>%
       return s
         .trim()
         .replace(/;$/, "")
-        .replace(/\s+/g, " ")
-        .replace(/^dplyr::/i, "dplyr::"); // consistent casing
+        .replace(/\s+/g, " ");
     }
 
     function equalsLoose(a, b) {
-      // Treat `mutate(...)` and `dplyr::mutate(...)` as equivalent if you want:
-      // (We already include both in CODE_ACCEPTED, but this also helps.)
+      // Treat mutate(...) and dplyr::mutate(...) as equivalent
       const na = normalizeLine(a).replace(/^dplyr::/i, "");
       const nb = normalizeLine(b).replace(/^dplyr::/i, "");
       return na === nb;
     }
 
-    /* ------------------ Start screen ------------------ */
-    document.getElementById("startBtn").addEventListener("click", () => {
-      // Optional: change header/subtitle once the game starts
-      // document.querySelector("h1").textContent = "Task sequence initiated";
-      showScreen("coral");
+    async function transitionHeaderTo(levelKey) {
+      const cfg = LEVEL_TITLES[levelKey];
+      if (!cfg) return;
+
+      // Fade out header
+      appHeader.classList.add("fading");
+      await new Promise(r => setTimeout(r, 260));
+
+      // Swap text
+      titleText.textContent = cfg.title;
+      subtitleText.textContent = cfg.subtitle || "";
+
+      // Fade back in
+      appHeader.classList.remove("fading");
+      await new Promise(r => setTimeout(r, 80));
+    }
+
+    async function transitionPanel(panelEl, nextKey, headerLevelKey) {
+      // Fade out panel
+      panelEl.classList.add("fading");
+      await new Promise(r => setTimeout(r, 240));
+
+      if (headerLevelKey) await transitionHeaderTo(headerLevelKey);
+
+      // Switch screen
+      showScreen(nextKey);
+
+      // Fade in next screen panel (if present)
+      const nextPanel = document.querySelector(`#screen-${nextKey} .panel`);
+      if (nextPanel) {
+        nextPanel.classList.add("fading");
+        // next tick
+        requestAnimationFrame(() => {
+          nextPanel.classList.remove("fading");
+        });
+      }
+    }
+
+    /* ------------------ Start -> Task 1 ------------------ */
+    document.getElementById("startBtn").addEventListener("click", async () => {
+      const startPanel = document.getElementById("panel-start");
+      await transitionPanel(startPanel, "coral", "coral");
       renderCoralQuiz();
     });
 
     /* ------------------ Task 1: Coral quiz ------------------ */
     let coralIndex = 0;
-
     const coralImg = document.getElementById("coralImg");
     const coralChoices = document.getElementById("coralChoices");
     const coralStatus = document.getElementById("coralStatus");
@@ -506,13 +569,11 @@ me %>%
     function renderCoralQuiz() {
       coralStatus.textContent = "";
       coralStatus.className = "status";
-
       const q = CORAL_QUIZ[coralIndex];
-      coralImg.src = q.src;
 
+      coralImg.src = q.src;
       coralImg.onerror = () => {
-        coralStatus.textContent =
-          "Image not found. Put a file at that path (e.g. images/coral1.jpg) or update CORAL_QUIZ.src.";
+        coralStatus.textContent = "Image not found. Check the file name/path in CORAL_QUIZ.src.";
         coralStatus.className = "status no";
       };
 
@@ -526,28 +587,29 @@ me %>%
       });
     }
 
-    function handleCoralChoice(opt) {
+    async function handleCoralChoice(opt) {
       const q = CORAL_QUIZ[coralIndex];
       if (opt === q.correct) {
         coralStatus.textContent = "Correct.";
         coralStatus.className = "status ok";
-        setTimeout(() => {
-          coralIndex++;
-          if (coralIndex >= CORAL_QUIZ.length) {
-            showScreen("surf");
-            renderSurfTask();
-          } else {
-            renderCoralQuiz();
-          }
-        }, 650);
+
+        await new Promise(r => setTimeout(r, 450));
+        coralIndex++;
+
+        if (coralIndex >= CORAL_QUIZ.length) {
+          await transitionPanel(document.getElementById("panel-coral"), "surf", "surf");
+          renderSurfTask();
+        } else {
+          renderCoralQuiz();
+        }
       } else {
         coralStatus.textContent = "Incorrect. Try again.";
         coralStatus.className = "status no";
       }
     }
 
-    document.getElementById("skipCoral").addEventListener("click", () => {
-      showScreen("surf");
+    document.getElementById("skipCoral").addEventListener("click", async () => {
+      await transitionPanel(document.getElementById("panel-coral"), "surf", "surf");
       renderSurfTask();
     });
 
@@ -566,16 +628,15 @@ me %>%
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = opt;
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", async () => {
           if (opt === SURF_TASK.correct) {
             surfStatus.textContent = "Correct.";
             surfStatus.className = "status ok";
-            setTimeout(() => {
-              showScreen("nick");
-              renderNickTask();
-            }, 650);
+            await new Promise(r => setTimeout(r, 450));
+            await transitionPanel(document.getElementById("panel-surf"), "nick", "nick");
+            renderNickTask();
           } else {
-            surfStatus.textContent = "Nope. Try again.";
+            surfStatus.textContent = "Incorrect. Try again.";
             surfStatus.className = "status no";
           }
         });
@@ -583,12 +644,12 @@ me %>%
       });
     }
 
-    document.getElementById("skipSurf").addEventListener("click", () => {
-      showScreen("nick");
+    document.getElementById("skipSurf").addEventListener("click", async () => {
+      await transitionPanel(document.getElementById("panel-surf"), "nick", "nick");
       renderNickTask();
     });
 
-    /* ------------------ Task 3: Nickname task ------------------ */
+    /* ------------------ Task 3: Nicknames ------------------ */
     const nickQuestion = document.getElementById("nickQuestion");
     const nickChoices = document.getElementById("nickChoices");
     const nickStatus = document.getElementById("nickStatus");
@@ -603,14 +664,13 @@ me %>%
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = opt;
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", async () => {
           if (opt === NICK_TASK.correct) {
             nickStatus.textContent = "Correct.";
             nickStatus.className = "status ok";
-            setTimeout(() => {
-              showScreen("code");
-              renderCodeTask();
-            }, 650);
+            await new Promise(r => setTimeout(r, 450));
+            await transitionPanel(document.getElementById("panel-nick"), "code", "code");
+            renderCodeTask();
           } else {
             nickStatus.textContent = "Incorrect. Try again.";
             nickStatus.className = "status no";
@@ -620,16 +680,14 @@ me %>%
       });
     }
 
-    document.getElementById("skipNick").addEventListener("click", () => {
-      showScreen("code");
+    document.getElementById("skipNick").addEventListener("click", async () => {
+      await transitionPanel(document.getElementById("panel-nick"), "code", "code");
       renderCodeTask();
     });
 
     /* ------------------ Task 4: R code ------------------ */
     const rSnippet = document.getElementById("rSnippet");
     const codeInput = document.getElementById("codeInput");
-    const checkCode = document.getElementById("checkCode");
-    const skipCode = document.getElementById("skipCode");
     const codeStatus = document.getElementById("codeStatus");
 
     function renderCodeTask() {
@@ -639,10 +697,8 @@ me %>%
       codeStatus.className = "status";
     }
 
-    checkCode.addEventListener("click", () => {
-      const typedRaw = codeInput.value;
-      const typed = normalizeLine(typedRaw);
-
+    document.getElementById("checkCode").addEventListener("click", async () => {
+      const typed = normalizeLine(codeInput.value);
       if (!typed) {
         codeStatus.textContent = "Type the missing line.";
         codeStatus.className = "status no";
@@ -650,20 +706,24 @@ me %>%
       }
 
       const matched = CODE_ACCEPTED.some(acc => equalsLoose(typed, acc));
-
       if (matched) {
         codeStatus.textContent = "Pass.";
         codeStatus.className = "status ok";
-        setTimeout(() => showScreen("val"), 650);
+        await new Promise(r => setTimeout(r, 450));
+        await transitionPanel(document.getElementById("panel-code"), "val", "val");
+        moveNoButton();
       } else {
         codeStatus.textContent = "Not quite. Hint: underscores matter.";
         codeStatus.className = "status no";
       }
     });
 
-    skipCode.addEventListener("click", () => showScreen("val"));
+    document.getElementById("skipCode").addEventListener("click", async () => {
+      await transitionPanel(document.getElementById("panel-code"), "val", "val");
+      moveNoButton();
+    });
 
-    /* ------------------ Valentine screen: moving No button ------------------ */
+    /* ------------------ Valentine: moving No button ------------------ */
     const stage = document.getElementById("stage");
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
@@ -672,7 +732,7 @@ me %>%
       const stageRect = stage.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
 
-      const padding = 12;
+      const padding = 14;
       const maxX = stageRect.width - btnRect.width - padding;
       const maxY = stageRect.height - btnRect.height - padding;
 
@@ -685,27 +745,38 @@ me %>%
 
     stage.addEventListener("mousemove", (e) => {
       const btn = noBtn.getBoundingClientRect();
-      const dx = (e.clientX - (btn.left + btn.width / 2));
-      const dy = (e.clientY - (btn.top + btn.height / 2));
+      const dx = e.clientX - (btn.left + btn.width / 2);
+      const dy = e.clientY - (btn.top + btn.height / 2);
       const dist = Math.sqrt(dx*dx + dy*dy);
-      if (dist < 120) moveNoButton();
+      if (dist < 140) moveNoButton();
     });
 
     noBtn.addEventListener("mouseenter", moveNoButton);
     noBtn.addEventListener("click", (e) => { e.preventDefault(); moveNoButton(); });
 
-    yesBtn.addEventListener("click", () => {
+    yesBtn.addEventListener("click", async () => {
       document.getElementById("loveText").innerHTML = LOVE_MESSAGE_HTML;
-      showScreen("love");
+      await transitionPanel(document.getElementById("panel-val"), "love", "love");
     });
 
-    /* ------------------ Love screen ------------------ */
-    document.getElementById("replay").addEventListener("click", () => {
+    /* ------------------ Replay ------------------ */
+    document.getElementById("replay").addEventListener("click", async () => {
       coralIndex = 0;
+
+      // Reset header back to the start text
+      appHeader.classList.add("fading");
+      await new Promise(r => setTimeout(r, 260));
+      titleText.textContent = "For my marine biologist boyfriend";
+      subtitleText.textContent = "Complete the tasks to unlock the final message.";
+      appHeader.classList.remove("fading");
+
       showScreen("start");
+      // Ensure start panel is visible
+      const p = document.getElementById("panel-start");
+      p.classList.remove("fading");
     });
 
-    // Put No somewhere random on load for fun
+    // Place No randomly initially (in case the user jumps screens)
     moveNoButton();
   </script>
 </body>
