@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Valentine's Reef Quest 💘</title>
+  <title>Valentine Game</title>
+
   <style>
-    /* --- Simple cute styling (EDIT ME if you want) --- */
     :root {
       --bg: #071a2b;
       --card: rgba(255,255,255,0.08);
       --text: #eaf6ff;
-      --muted: rgba(234,246,255,0.75);
+      --muted: rgba(234,246,255,0.78);
       --accent: #ff5aa5;
       --accent2: #4fe3c2;
       --danger: #ff6b6b;
@@ -33,9 +33,7 @@
       padding: 22px;
     }
 
-    .wrap {
-      width: min(920px, 100%);
-    }
+    .wrap { width: min(920px, 100%); }
 
     .card {
       background: var(--card);
@@ -54,17 +52,12 @@
       margin: 0 0 6px 0;
       font-size: clamp(22px, 3vw, 32px);
       letter-spacing: 0.2px;
-    }
-    .subtitle { margin: 0; color: var(--muted); line-height: 1.35; }
-
-    .content {
-      padding: 22px;
-      display: grid;
-      gap: 16px;
+      font-weight: 800;
     }
 
-    .row { display: grid; gap: 14px; grid-template-columns: 1.25fr 1fr; }
-    @media (max-width: 860px) { .row { grid-template-columns: 1fr; } }
+    .subtitle { margin: 0; color: var(--muted); line-height: 1.4; }
+
+    .content { padding: 22px; display: grid; gap: 16px; }
 
     .panel {
       background: rgba(0,0,0,0.18);
@@ -73,28 +66,17 @@
       padding: 16px;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
+    .hint { color: var(--muted); font-size: 14px; line-height: 1.4; }
 
-    .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-    button, .btn {
+    .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    button {
       appearance: none;
       border: 1px solid rgba(255,255,255,0.18);
       background: rgba(255,255,255,0.10);
       color: var(--text);
       padding: 10px 14px;
       border-radius: 12px;
-      font-weight: 600;
+      font-weight: 650;
       cursor: pointer;
       transition: transform 0.08s ease, background 0.2s ease, border 0.2s ease;
       user-select: none;
@@ -111,12 +93,11 @@
     .danger { border-color: rgba(255,107,107,0.55); background: rgba(255,107,107,0.18); }
     .danger:hover { background: rgba(255,107,107,0.25); }
 
-    .hint { color: var(--muted); font-size: 14px; line-height: 1.35; }
-    .status { font-weight: 700; margin-top: 10px; }
+    .status { font-weight: 750; margin-top: 10px; }
     .status.ok { color: var(--accent2); }
     .status.no { color: var(--danger); }
 
-    img.coral {
+    img.photo {
       width: 100%;
       height: 320px;
       object-fit: cover;
@@ -124,12 +105,12 @@
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(0,0,0,0.25);
     }
-    @media (max-width: 860px) { img.coral { height: 260px; } }
+    @media (max-width: 860px) { img.photo { height: 260px; } }
 
     .codebox {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: 13px;
-      line-height: 1.45;
+      line-height: 1.5;
       background: rgba(0,0,0,0.35);
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 14px;
@@ -153,8 +134,7 @@
     .screen { display: none; }
     .screen.active { display: block; }
 
-    /* Valentine screen (moving No button) */
-    .valentine-stage {
+    .stage {
       position: relative;
       height: 340px;
       border-radius: 14px;
@@ -163,11 +143,7 @@
       overflow: hidden;
       padding: 14px;
     }
-    .floating {
-      position: absolute;
-      left: 58%;
-      top: 55%;
-    }
+    .floating { position: absolute; left: 60%; top: 55%; }
 
     .photos {
       display: grid;
@@ -194,131 +170,150 @@
   <div class="wrap">
     <div class="card">
       <header>
-        <h1>For my coder, marine-biologist boyfriend… 🧠🌊💘</h1>
-        <p class="subtitle">
-          <!-- EDIT ME: tweak this intro line -->
-          You must complete the sacred reef tasks to unlock the final message.
-          No pressure. The corals are watching.
+        <h1>For my coder, marine biologist boyfriend...</h1>
+        <p class="subtitle" id="topSubtitle">
+          <!-- EDIT THIS: intro line shown on the start screen -->
+          I made you a small game. Complete the tasks to unlock the final message.
         </p>
       </header>
 
       <div class="content">
 
-        <!-- SCREEN 1: Coral ID quiz -->
-        <section id="screen-quiz" class="screen active">
-          <div class="row">
-            <div class="panel">
-              <div class="badge">🪸 Task 1 · Coral ID</div>
-              <div class="hint">
-                <!-- EDIT ME: instructions -->
-                Identify the coral. Your reputation (and my dramatic affection) depends on it.
-              </div>
-
-              <div style="margin-top:12px">
-                <img id="coralImg" class="coral" src="" alt="Coral photo" />
-              </div>
-
-              <div id="choices" class="btns"></div>
-              <div id="quizStatus" class="status"></div>
-
-              <div class="btns" style="margin-top:14px">
-                <button id="skipQuiz" class="danger" type="button">Skip (coward mode)</button>
-              </div>
-            </div>
-
-            <div class="panel">
-              <div class="badge">🧭 How to customize</div>
-              <div class="hint">
-                Put coral images in an <b>images/</b> folder and update the <code>QUIZ</code> array in the script.
-                You can include <i>Acropora loripes</i> as the correct answer for one of them (obviously).
-              </div>
-              <div class="hint" style="margin-top:10px">
-                If you don’t have coral photos you own, use your own shots. (Avoid random Google images unless you
-                have permission to reuse them.)
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- SCREEN 2: R code task -->
-        <section id="screen-code" class="screen">
-          <div class="row">
-            <div class="panel">
-              <div class="badge">💻 Task 2 · Finish the R code</div>
-              <div class="hint">
-                <!-- EDIT ME: instructions -->
-                Fill in the missing line (the one with <b>???</b>). Keep it tidyverse-ish.
-              </div>
-
-              <div class="codebox" id="rSnippet"></div>
-
-              <div style="margin-top:10px">
-                <input id="codeInput" type="text" placeholder='Type the missing R line here, e.g. mutate(...)' />
-              </div>
-
-              <div class="btns">
-                <button id="checkCode" class="good" type="button">Run the brain compiler</button>
-                <button id="skipCode" class="danger" type="button">Skip (double coward mode)</button>
-              </div>
-
-              <div id="codeStatus" class="status"></div>
-            </div>
-
-            <div class="panel">
-              <div class="badge">🔧 Notes</div>
-              <div class="hint">
-                The check is simple string-matching (not a real R interpreter).
-                You can make it easier/harder by changing the <code>CODE_EXPECTED</code> value in the script.
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- SCREEN 3: Valentine question with moving No button -->
-        <section id="screen-valentine" class="screen">
+        <!-- SCREEN 0: Start -->
+        <section id="screen-start" class="screen active">
           <div class="panel">
-            <div class="badge">💖 Final Task · The Big Question</div>
             <div class="hint">
-              <!-- EDIT ME: question -->
-              Will you be my Valentine?
+              <!-- EDIT THIS: start screen body -->
+              Rules: no googling, no arguing with the UI, and absolutely no pretending you don't know what an underscore is.
+            </div>
+            <div class="btns">
+              <button id="startBtn" class="primary" type="button">Start</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCREEN 1: Coral ID quiz -->
+        <section id="screen-coral" class="screen">
+          <div class="panel">
+            <div class="hint" id="coralPrompt">
+              <!-- EDIT THIS: coral task prompt -->
+              Task 1: Identify the coral.
             </div>
 
-            <div class="valentine-stage" id="stage">
+            <div style="margin-top:12px">
+              <img id="coralImg" class="photo" src="" alt="Coral photo" />
+            </div>
+
+            <div id="coralChoices" class="btns"></div>
+            <div id="coralStatus" class="status"></div>
+
+            <div class="btns" style="margin-top:14px">
+              <button id="skipCoral" class="danger" type="button">Skip</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCREEN 2: Surfing task -->
+        <section id="screen-surf" class="screen">
+          <div class="panel">
+            <div class="hint" id="surfPrompt">
+              <!-- EDIT THIS: surfing task prompt -->
+              Task 2: Surf check. Choose the correct answer.
+            </div>
+
+            <div class="codebox" id="surfQuestion"></div>
+            <div id="surfChoices" class="btns"></div>
+            <div id="surfStatus" class="status"></div>
+
+            <div class="btns" style="margin-top:14px">
+              <button id="skipSurf" class="danger" type="button">Skip</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCREEN 3: Nicknames / about-you quiz -->
+        <section id="screen-nick" class="screen">
+          <div class="panel">
+            <div class="hint" id="nickPrompt">
+              <!-- EDIT THIS: nickname task prompt -->
+              Task 3: Nickname audit. Pick the real one.
+            </div>
+
+            <div class="codebox" id="nickQuestion"></div>
+            <div id="nickChoices" class="btns"></div>
+            <div id="nickStatus" class="status"></div>
+
+            <div class="btns" style="margin-top:14px">
+              <button id="skipNick" class="danger" type="button">Skip</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCREEN 4: R code task -->
+        <section id="screen-code" class="screen">
+          <div class="panel">
+            <div class="hint" id="codePrompt">
+              <!-- EDIT THIS: code task prompt -->
+              Task 4: Finish the R code. Do not forget the underscores.
+            </div>
+
+            <div class="codebox" id="rSnippet"></div>
+
+            <div style="margin-top:10px">
+              <input id="codeInput" type="text" placeholder="Type the missing R line here" />
+            </div>
+
+            <div class="btns">
+              <button id="checkCode" class="good" type="button">Check</button>
+              <button id="skipCode" class="danger" type="button">Skip</button>
+            </div>
+
+            <div id="codeStatus" class="status"></div>
+          </div>
+        </section>
+
+        <!-- SCREEN 5: Valentine question -->
+        <section id="screen-val" class="screen">
+          <div class="panel">
+            <div class="hint" id="valPrompt">
+              <!-- EDIT THIS: valentine question -->
+              Final task: Will you be my Valentine?
+            </div>
+
+            <div class="stage" id="stage">
               <div style="max-width: 520px; margin-top: 10px;">
-                <div class="hint">
-                  <!-- EDIT ME: extra teasing text -->
-                  Choose wisely. The “No” option is… ecologically unstable.
+                <div class="hint" id="valSubPrompt">
+                  <!-- EDIT THIS: small subtext -->
+                  Select your answer.
                 </div>
 
                 <div class="btns" style="margin-top:14px">
-                  <button id="yesBtn" class="primary" type="button">YES 💘</button>
+                  <button id="yesBtn" class="primary" type="button">Yes</button>
                 </div>
               </div>
 
-              <button id="noBtn" class="danger floating" type="button">No 🙃</button>
+              <button id="noBtn" class="danger floating" type="button">No</button>
             </div>
           </div>
         </section>
 
-        <!-- SCREEN 4: Love message -->
+        <!-- SCREEN 6: Love message -->
         <section id="screen-love" class="screen">
           <div class="panel">
-            <div class="badge">🌺 Reef Unlocked · Message</div>
-
-            <div id="loveText" style="font-size: 18px; line-height: 1.5;">
-              <!-- Filled by JS -->
-            </div>
+            <div id="loveText" style="font-size: 18px; line-height: 1.55;"></div>
 
             <div class="photos">
-              <!-- EDIT ME: add your own images (photos of you two, Fiji hype, etc.) -->
-              <!-- Put files in images/ and update these src paths. You can delete extra <img> blocks. -->
-              <img src="images/us1.jpg" alt="Us photo 1 (replace me)" />
-              <img src="images/us2.jpg" alt="Us photo 2 (replace me)" />
-              <img src="images/fiji.jpg" alt="Fiji photo (replace me)" />
+              <!-- EDIT THESE:
+                   1) Put your images in an /images/ folder in the repo
+                   2) Replace the filenames below (or delete extra <img> tags)
+              -->
+              <img src="images/us1.jpg" alt="Photo 1" />
+              <img src="images/us2.jpg" alt="Photo 2" />
+              <img src="images/fiji.jpg" alt="Photo 3" />
             </div>
 
             <div class="btns" style="margin-top: 14px;">
-              <button id="replay" class="good" type="button">Replay the chaos</button>
+              <button id="replay" class="good" type="button">Replay</button>
             </div>
           </div>
         </section>
@@ -327,80 +322,139 @@
     </div>
 
     <p class="hint" style="text-align:center; margin-top: 14px;">
-      Made with scientifically questionable romance and unusually persistent UI.
+      <!-- EDIT THIS: footer line -->
+      Built for one specific marine biologist.
     </p>
   </div>
 
   <script>
     /* ============================================================
-      EDIT ME SECTION 1: Coral quiz content
-      - Put your images in /images/
-      - Update src, correct, and options
+      EDIT SECTION A: Coral quiz content
+      - Put coral images in /images/
+      - Replace src paths with your filenames
+      - Add/remove quiz entries as you like
+      - If you want his favourite: set correct: "Acropora loripes" for one entry
     ============================================================ */
-    const QUIZ = [
+    const CORAL_QUIZ = [
       {
-        src: "images/coral1.jpg",               // EDIT ME: your image path
-        correct: "Acropora loripes",            // EDIT ME
+        src: "images/coral1.jpg",
+        correct: "Acropora loripes",
         options: ["Acropora loripes", "Pocillopora damicornis", "Montipora digitata", "Porites lobata"]
       },
       {
-        src: "images/coral2.jpg",               // EDIT ME
-        correct: "Pocillopora damicornis",      // EDIT ME
+        src: "images/coral2.jpg",
+        correct: "Pocillopora damicornis",
         options: ["Pocillopora damicornis", "Acropora tenuis", "Favia sp.", "Stylophora pistillata"]
       },
       {
-        src: "images/coral3.jpg",               // EDIT ME
-        correct: "Porites lobata",              // EDIT ME
+        src: "images/coral3.jpg",
+        correct: "Porites lobata",
         options: ["Porites lobata", "Acropora millepora", "Montipora capricornis", "Goniastrea sp."]
       }
     ];
 
     /* ============================================================
-      EDIT ME SECTION 2: R code task content
-      - Keep CODE_EXPECTED as the exact line you want them to type
-      - The check is forgiving about whitespace + trailing semicolons
+      EDIT SECTION B: Surfing task
+      - Make it as inside-jokey as you want
+      - Keep one option exactly matching `correct`
+      - You can add more tasks by copying the same structure and chaining screens
+    ============================================================ */
+    const SURF_TASK = {
+      question: [
+        "Scenario:",
+        "Waist-to-chest high, punchy beach break, a bit of wind on it.",
+        "You want speed but also some control.",
+        "",
+        "Pick the best call:"
+      ].join("\n"),
+      correct: "Take the board that paddles easiest and go slightly bigger fins for hold.",
+      options: [
+        "Take the board that paddles easiest and go slightly bigger fins for hold.",
+        "Take the smallest board possible and refuse to paddle.",
+        "Wax is optional. Commitment is optional. Sand is inevitable.",
+        "Ride it switch-stance only. The ocean respects chaos."
+      ]
+    };
+
+    /* ============================================================
+      EDIT SECTION C: Nicknames / about-you task
+      - If you want multiple nickname questions, turn this into an array like CORAL_QUIZ
+    ============================================================ */
+    const NICK_TASK = {
+      question: [
+        "One of these is a real nickname you've used for me.",
+        "Pick the correct one."
+      ].join("\n"),
+      correct: "EDIT_ME_REAL_NICKNAME",
+      options: [
+        "EDIT_ME_REAL_NICKNAME",
+        "EDIT_ME_FAKE_NICKNAME_1",
+        "EDIT_ME_FAKE_NICKNAME_2",
+        "EDIT_ME_FAKE_NICKNAME_3"
+      ]
+    };
+
+    /* ============================================================
+      EDIT SECTION D: R code task (multiple acceptable answers)
+      - Replace the snippet to match your vibe
+      - Add multiple acceptable lines in CODE_ACCEPTED
+      - The checker is forgiving about whitespace, trailing semicolons, and `dplyr::` prefixes
     ============================================================ */
     const R_SNIPPET = `
 library(dplyr)
 
-df <- tibble(
-  species = c("acropora", "porites", "montipora"),
-  cover   = c(0.42, 0.31, 0.27)
+me <- tibble(
+  trait = c("kind", "funny", "brilliant"),
+  score = c(100, 100, 100)
 )
 
-df %>%
-  ??? %>%                             # <- fill this line
-  arrange(desc(cover))
+me %>%
+  ??? %>%                             # fill this line (do not forget underscores)
+  arrange(desc(score))
 `.trim();
 
-    // EDIT ME: what you expect them to type for the ??? line.
-    // Example keeps it simple and pipey.
-    const CODE_EXPECTED = 'mutate(is_fave = species == "acropora")';
+    // Put the line(s) you want him to type for ??? below.
+    // He can match ANY ONE of these to pass.
+    // Tips:
+    // - Include a version with `dplyr::mutate(...)` if he tends to type it
+    // - Include a version with different column names if you change the snippet
+    const CODE_ACCEPTED = [
+      'mutate(favourite_thing = trait == "kind")',
+      'mutate(favourite_thing = trait == "funny")',
+      'mutate(favourite_thing = trait == "brilliant")',
+      'dplyr::mutate(favourite_thing = trait == "kind")',
+      'dplyr::mutate(favourite_thing = trait == "funny")',
+      'dplyr::mutate(favourite_thing = trait == "brilliant")'
+    ];
 
     /* ============================================================
-      EDIT ME SECTION 3: Love message text
+      EDIT SECTION E: Final love message
+      - Write whatever you want in HTML
+      - Keep it short or make it a whole letter
     ============================================================ */
     const LOVE_MESSAGE_HTML = `
-      <p><b>Heck yes.</b> 🥹💘</p>
+      <p><b>Good.</b></p>
       <p>
-        I’m so happy I get to do life with you — the surfing, the coral nerd-outs,
-        the RStudio wizardry, and the “wait… why is this object a list??” moments.
+        I love doing life with you. The reef talk, the surf talk, the code talk, the everything.
+        Thanks for being you, and for teaching me so much (especially pipes).
       </p>
       <p>
-        Thanks for teaching me so much (especially pipes — iconic). I love you a stupid amount,
-        and I can’t wait to celebrate together in <b>Fiji</b> soon. 🌴🌊
+        I’m really happy you’re my partner. I can’t wait to celebrate together in Fiji soon.
       </p>
       <p>
-        Now come collect your prize: a kiss, a cuddle, and possibly snacks.
+        Come collect your prize.
       </p>
     `;
 
-    /* ------------------ App state + helpers ------------------ */
+    /* ------------------ Helpers + state ------------------ */
     const screens = {
-      quiz: document.getElementById("screen-quiz"),
-      code: document.getElementById("screen-code"),
-      val:  document.getElementById("screen-valentine"),
-      love: document.getElementById("screen-love"),
+      start: document.getElementById("screen-start"),
+      coral: document.getElementById("screen-coral"),
+      surf:  document.getElementById("screen-surf"),
+      nick:  document.getElementById("screen-nick"),
+      code:  document.getElementById("screen-code"),
+      val:   document.getElementById("screen-val"),
+      love:  document.getElementById("screen-love"),
     };
 
     function showScreen(key) {
@@ -422,89 +476,194 @@ df %>%
       return s
         .trim()
         .replace(/;$/, "")
-        .replace(/\s+/g, " ");
+        .replace(/\s+/g, " ")
+        .replace(/^dplyr::/i, "dplyr::"); // consistent casing
     }
 
+    function equalsLoose(a, b) {
+      // Treat `mutate(...)` and `dplyr::mutate(...)` as equivalent if you want:
+      // (We already include both in CODE_ACCEPTED, but this also helps.)
+      const na = normalizeLine(a).replace(/^dplyr::/i, "");
+      const nb = normalizeLine(b).replace(/^dplyr::/i, "");
+      return na === nb;
+    }
+
+    /* ------------------ Start screen ------------------ */
+    document.getElementById("startBtn").addEventListener("click", () => {
+      // Optional: change header/subtitle once the game starts
+      // document.querySelector("h1").textContent = "Task sequence initiated";
+      showScreen("coral");
+      renderCoralQuiz();
+    });
+
     /* ------------------ Task 1: Coral quiz ------------------ */
-    let quizIndex = 0;
+    let coralIndex = 0;
 
     const coralImg = document.getElementById("coralImg");
-    const choices = document.getElementById("choices");
-    const quizStatus = document.getElementById("quizStatus");
-    const skipQuiz = document.getElementById("skipQuiz");
+    const coralChoices = document.getElementById("coralChoices");
+    const coralStatus = document.getElementById("coralStatus");
 
-    function renderQuiz() {
-      quizStatus.textContent = "";
-      quizStatus.className = "status";
-      const q = QUIZ[quizIndex];
+    function renderCoralQuiz() {
+      coralStatus.textContent = "";
+      coralStatus.className = "status";
 
+      const q = CORAL_QUIZ[coralIndex];
       coralImg.src = q.src;
+
       coralImg.onerror = () => {
-        quizStatus.textContent =
-          "Image not found 😅 Put a file at that path (e.g. images/coral1.jpg), or update QUIZ.src in the code.";
-        quizStatus.className = "status no";
+        coralStatus.textContent =
+          "Image not found. Put a file at that path (e.g. images/coral1.jpg) or update CORAL_QUIZ.src.";
+        coralStatus.className = "status no";
       };
 
-      choices.innerHTML = "";
+      coralChoices.innerHTML = "";
       shuffle(q.options).forEach(opt => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = opt;
-        btn.addEventListener("click", () => handleChoice(opt));
-        choices.appendChild(btn);
+        btn.addEventListener("click", () => handleCoralChoice(opt));
+        coralChoices.appendChild(btn);
       });
     }
 
-    function handleChoice(opt) {
-      const q = QUIZ[quizIndex];
+    function handleCoralChoice(opt) {
+      const q = CORAL_QUIZ[coralIndex];
       if (opt === q.correct) {
-        quizStatus.textContent = "Correct ✅ The reef approves.";
-        quizStatus.className = "status ok";
+        coralStatus.textContent = "Correct.";
+        coralStatus.className = "status ok";
         setTimeout(() => {
-          quizIndex++;
-          if (quizIndex >= QUIZ.length) showScreen("code");
-          else renderQuiz();
-        }, 750);
+          coralIndex++;
+          if (coralIndex >= CORAL_QUIZ.length) {
+            showScreen("surf");
+            renderSurfTask();
+          } else {
+            renderCoralQuiz();
+          }
+        }, 650);
       } else {
-        quizStatus.textContent = "Nope ❌ Try again (or blame lighting).";
-        quizStatus.className = "status no";
+        coralStatus.textContent = "Incorrect. Try again.";
+        coralStatus.className = "status no";
       }
     }
 
-    skipQuiz.addEventListener("click", () => showScreen("code"));
+    document.getElementById("skipCoral").addEventListener("click", () => {
+      showScreen("surf");
+      renderSurfTask();
+    });
 
-    /* ------------------ Task 2: R code check ------------------ */
+    /* ------------------ Task 2: Surfing ------------------ */
+    const surfQuestion = document.getElementById("surfQuestion");
+    const surfChoices = document.getElementById("surfChoices");
+    const surfStatus = document.getElementById("surfStatus");
+
+    function renderSurfTask() {
+      surfStatus.textContent = "";
+      surfStatus.className = "status";
+      surfQuestion.textContent = SURF_TASK.question;
+
+      surfChoices.innerHTML = "";
+      shuffle(SURF_TASK.options).forEach(opt => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = opt;
+        btn.addEventListener("click", () => {
+          if (opt === SURF_TASK.correct) {
+            surfStatus.textContent = "Correct.";
+            surfStatus.className = "status ok";
+            setTimeout(() => {
+              showScreen("nick");
+              renderNickTask();
+            }, 650);
+          } else {
+            surfStatus.textContent = "Nope. Try again.";
+            surfStatus.className = "status no";
+          }
+        });
+        surfChoices.appendChild(btn);
+      });
+    }
+
+    document.getElementById("skipSurf").addEventListener("click", () => {
+      showScreen("nick");
+      renderNickTask();
+    });
+
+    /* ------------------ Task 3: Nickname task ------------------ */
+    const nickQuestion = document.getElementById("nickQuestion");
+    const nickChoices = document.getElementById("nickChoices");
+    const nickStatus = document.getElementById("nickStatus");
+
+    function renderNickTask() {
+      nickStatus.textContent = "";
+      nickStatus.className = "status";
+      nickQuestion.textContent = NICK_TASK.question;
+
+      nickChoices.innerHTML = "";
+      shuffle(NICK_TASK.options).forEach(opt => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = opt;
+        btn.addEventListener("click", () => {
+          if (opt === NICK_TASK.correct) {
+            nickStatus.textContent = "Correct.";
+            nickStatus.className = "status ok";
+            setTimeout(() => {
+              showScreen("code");
+              renderCodeTask();
+            }, 650);
+          } else {
+            nickStatus.textContent = "Incorrect. Try again.";
+            nickStatus.className = "status no";
+          }
+        });
+        nickChoices.appendChild(btn);
+      });
+    }
+
+    document.getElementById("skipNick").addEventListener("click", () => {
+      showScreen("code");
+      renderCodeTask();
+    });
+
+    /* ------------------ Task 4: R code ------------------ */
     const rSnippet = document.getElementById("rSnippet");
     const codeInput = document.getElementById("codeInput");
     const checkCode = document.getElementById("checkCode");
     const skipCode = document.getElementById("skipCode");
     const codeStatus = document.getElementById("codeStatus");
 
-    rSnippet.textContent = R_SNIPPET;
+    function renderCodeTask() {
+      rSnippet.textContent = R_SNIPPET;
+      codeInput.value = "";
+      codeStatus.textContent = "";
+      codeStatus.className = "status";
+    }
 
     checkCode.addEventListener("click", () => {
-      const typed = normalizeLine(codeInput.value);
-      const expected = normalizeLine(CODE_EXPECTED);
+      const typedRaw = codeInput.value;
+      const typed = normalizeLine(typedRaw);
 
       if (!typed) {
-        codeStatus.textContent = "Type something, oh mighty data plumber.";
+        codeStatus.textContent = "Type the missing line.";
         codeStatus.className = "status no";
         return;
       }
 
-      if (typed === expected) {
-        codeStatus.textContent = "Pass ✅ Your tidyverse license remains valid.";
+      const matched = CODE_ACCEPTED.some(acc => equalsLoose(typed, acc));
+
+      if (matched) {
+        codeStatus.textContent = "Pass.";
         codeStatus.className = "status ok";
         setTimeout(() => showScreen("val"), 650);
       } else {
-        codeStatus.textContent = "Not quite ❌ (Hint: it starts with mutate(...))";
+        codeStatus.textContent = "Not quite. Hint: underscores matter.";
         codeStatus.className = "status no";
       }
     });
 
     skipCode.addEventListener("click", () => showScreen("val"));
 
-    /* ------------------ Task 3: Moving No button ------------------ */
+    /* ------------------ Valentine screen: moving No button ------------------ */
     const stage = document.getElementById("stage");
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
@@ -524,13 +683,11 @@ df %>%
       noBtn.style.top = `${y}px`;
     }
 
-    // Dodge when cursor gets close (desktop). Also works on touch (tap triggers move).
     stage.addEventListener("mousemove", (e) => {
       const btn = noBtn.getBoundingClientRect();
       const dx = (e.clientX - (btn.left + btn.width / 2));
       const dy = (e.clientY - (btn.top + btn.height / 2));
       const dist = Math.sqrt(dx*dx + dy*dy);
-
       if (dist < 120) moveNoButton();
     });
 
@@ -542,20 +699,13 @@ df %>%
       showScreen("love");
     });
 
-    /* ------------------ Love screen controls ------------------ */
+    /* ------------------ Love screen ------------------ */
     document.getElementById("replay").addEventListener("click", () => {
-      // Reset state
-      quizIndex = 0;
-      codeInput.value = "";
-      codeStatus.textContent = "";
-      quizStatus.textContent = "";
-      renderQuiz();
-      showScreen("quiz");
+      coralIndex = 0;
+      showScreen("start");
     });
 
-    /* ------------------ Boot ------------------ */
-    renderQuiz();
-    // Start the "No" button somewhere fun
+    // Put No somewhere random on load for fun
     moveNoButton();
   </script>
 </body>
