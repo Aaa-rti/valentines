@@ -402,7 +402,7 @@
     ============================================================ */
     const LEVEL_TITLES = {
       coral: { title: "Task 1: Coral ID", subtitle: "Corally bits you should know" },
-      nick:  { title: "Task 2: Your Replacement Task", subtitle: "Replace this task with your own." },
+      nick:  { title: "Task 2: Nicknames", subtitle: "There's too many to count, but whats the best?." },
       code:  { title: "Task 3: RStudio", subtitle: "For the coder in you." },
       val:   { title: "Final Task", subtitle: "This one should be easy. Allegedly." },
       love:  { title: "Unlocked", subtitle: "" }
@@ -434,14 +434,18 @@
     ============================================================ */
     const NICK_TASK = {
       question: [
-        "What's my favourite nickname you've called me?",
-        "For now: pick the correct nickname."
+        "I love them all but which one's my favourite?"
       ].join("\n"),
       correct: "Trouble",
       options: [
         "Trouble",
         "Pigot",
         "Paperclip",
+         "Goose",
+         "Shrimp",
+         "Honey",
+         "Mi amor",
+         "Sweetheart",
         "Speedbump"
       ]
     };
@@ -454,7 +458,7 @@
 library(dplyr)
 
 me <- tibble(
-  thing_you_like_about_me = c("EDIT_ME_1", "EDIT_ME_2", "EDIT_ME_3"),
+  thing_you_like_about_me = c("eyes", "butt", "hair"),
   score = c(100, 100, 100)
 )
 
@@ -473,16 +477,18 @@ me %>%
     ];
 
     const LOVE_MESSAGE_HTML = `
-      <p><b>Good.</b></p>
+      <p><b>Good soup.</b></p>
       <p>
-        I love doing life with you. The reef talk, the surf talk, the code talk, the everything.
-        Thanks for being you, and for teaching me so much.
+        Excellent job getting through the tasks, the game master is waiting for the sloppiest, most passionate kisses.
+        Well done with the students. there was never any doubt that you'd crush it and you absolutely did. I am super proud of you!
+        I love talking corals, birds and codes with you but most importantly, I love doing life with you. 
       </p>
       <p>
-        I’m really happy you’re my partner. I can’t wait to celebrate together in Fiji soon.
+        Thank you for being an incredible boyfriend that makes me laugh.
+        I'm sick of this long distance shit and can’t wait to celebrate together in Fiji soon.
       </p>
       <p>
-        Come collect your prize.
+        You'll get your prize on the 15th (as will I) xx
       </p>
     `;
 
