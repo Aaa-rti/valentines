@@ -358,7 +358,7 @@
         <!-- SCREEN: Task 3 (R code) -->
         <section id="screen-code" class="screen">
           <div class="panel" id="panel-code">
-            <p class="hint" id="codePrompt">Finish the R code. Don't forget what you taught me.</p>
+            <p class="hint" id="codePrompt">Fill the missing line with a mutate(...) that uses thing_you_like_about_me (pipes welcome).</p>
             <div class="codebox" id="rSnippet"></div>
             <input id="codeInput" type="text" placeholder="Type the missing R line here" />
             <div class="btns">
@@ -471,23 +471,16 @@
 library(dplyr)
 
 me <- tibble(
-  thing_you_like_about_me = c("eyes", "butt", "hair"),
+  thing_you_like_about_me = c("my laugh", "my brain", "my butt"),
   score = c(100, 100, 100)
 )
 
 me %>%
-  ??? %>%                             # fill this line (underscores matter)
+  ??? %>%   # add a column called love_note using mutate()
   arrange(desc(score))
 `.trim();
 
-    const CODE_ACCEPTED = [
-      'mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_1")',
-      'mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_2")',
-      'mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_3")',
-      'dplyr::mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_1")',
-      'dplyr::mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_2")',
-      'dplyr::mutate(favourite_thing = thing_you_like_about_me == "EDIT_ME_3")'
-    ];
+
 
     const LOVE_MESSAGE_HTML = `
       <p><b>Good soup.</b></p>
@@ -603,6 +596,36 @@ me %>%
       const nb = normalizeLine(b).replace(/^dplyr::/i, "");
       return na === nb;
     }
+
+    function stripStrings(s) {
+  // Remove string literals to avoid people gaming the check with just "thing_you_like_about_me" in quotes
+  return s.replace(/"([^"\\]|\\.)*"/g, '""').replace(/'([^'\\]|\\.)*'/g, "''");
+}
+
+function isValidMutateLine(input) {
+  const raw = input.trim();
+  if (!raw) return false;
+
+  // Normalize spacing and ignore trailing semicolons
+  const line = normalizeLine(raw);
+
+  // Must contain mutate( ... )
+  const hasMutate = /\b(?:dplyr::)?mutate\s*\(/i.test(line);
+  if (!hasMutate) return false;
+
+  // Must reference the existing column (not only inside quotes)
+  const noStrings = stripStrings(line);
+  const mentionsCol = /\bthing_you_like_about_me\b/.test(noStrings);
+  if (!mentionsCol) return false;
+
+  // Strong nudge: encourage creating love_note, but don't require it
+  // If you DO want to require love_note specifically, uncomment the next two lines:
+  // const makesLoveNote = /\blove_note\s*=/.test(noStrings);
+  // if (!makesLoveNote) return false;
+
+  return true;
+}
+
 
     async function transitionHeaderTo(levelKey) {
       const cfg = LEVEL_TITLES[levelKey];
@@ -745,26 +768,28 @@ me %>%
     }
 
     document.getElementById("checkCode").addEventListener("click", async () => {
-      const typed = normalizeLine(codeInput.value);
-      if (!typed) {
-        codeStatus.textContent = "Type the missing line.";
-        codeStatus.className = "status no";
-        return;
-      }
+  const typed = codeInput.value;
 
-      const matched = CODE_ACCEPTED.some(acc => equalsLoose(typed, acc));
-      if (matched) {
-        codeStatus.textContent = "Pass.";
-        codeStatus.className = "status ok";
-        await new Promise(r => setTimeout(r, 420));
-        markDone("code");
-        await transitionPanel(document.getElementById("panel-code"), "val", "val");
-        moveNoButton();
-      } else {
-        codeStatus.textContent = "Not quite. Underscores matter.";
-        codeStatus.className = "status no";
-      }
-    });
+  if (!typed.trim()) {
+    codeStatus.textContent = "Type the missing line (a mutate() line) 💛";
+    codeStatus.className = "status no";
+    return;
+  }
+
+  if (isValidMutateLine(typed)) {
+    codeStatus.textContent = "Nailed it. Tidyverse romance unlocked 🦐";
+    codeStatus.className = "status ok";
+
+    await new Promise(r => setTimeout(r, 420));
+    markDone("code");
+    await transitionPanel(document.getElementById("panel-code"), "val", "val");
+    moveNoButton();
+  } else {
+    codeStatus.textContent = "Close — it needs a mutate(...) that uses thing_you_like_about_me.";
+    codeStatus.className = "status no";
+  }
+});
+
 
     document.getElementById("skipCode").addEventListener("click", async () => {
       markDone("code");
