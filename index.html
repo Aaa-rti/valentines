@@ -280,6 +280,19 @@
       color: rgba(234,246,255,0.78);
       font-size: 14px;
     }
+
+    /* Shrimp burst */
+.shrimp {
+  position: fixed;
+  left: 0;
+  top: 0;
+  font-size: 28px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
   </style>
 </head>
 
@@ -536,6 +549,51 @@ me %>%
       return a;
     }
 
+    function shrimpBurst({
+  count = 90,
+  durationMs = 1400,
+  spread = 520
+} = {}) {
+  const emojis = ["🦐", "🍤"]; // shrimp + prawn tempura energy
+
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 3;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("div");
+    el.className = "shrimp";
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.random() * spread;
+    const dx = Math.cos(angle) * radius;
+    const dy = Math.sin(angle) * radius;
+
+    const rotate = (Math.random() * 720 - 360);
+    const driftY = 220 + Math.random() * 260; // extra fall
+
+    el.style.left = `${centerX}px`;
+    el.style.top = `${centerY}px`;
+    el.style.opacity = "1";
+
+    document.body.appendChild(el);
+
+    el.animate(
+      [
+        { transform: `translate(-50%, -50%) translate(0px, 0px) rotate(0deg) scale(1)`, opacity: 1 },
+        { transform: `translate(-50%, -50%) translate(${dx}px, ${dy + driftY}px) rotate(${rotate}deg) scale(${0.8 + Math.random() * 0.6})`, opacity: 0 }
+      ],
+      {
+        duration: durationMs + Math.random() * 500,
+        easing: "cubic-bezier(.15,.8,.2,1)",
+        fill: "forwards"
+      }
+    );
+
+    setTimeout(() => el.remove(), durationMs + 900);
+  }
+}
+
     function normalizeLine(s) {
       return s.trim().replace(/;$/, "").replace(/\s+/g, " ");
     }
@@ -745,12 +803,17 @@ me %>%
     noBtn.addEventListener("mouseenter", moveNoButton);
     noBtn.addEventListener("click", (e) => { e.preventDefault(); moveNoButton(); });
 
-    yesBtn.addEventListener("click", async () => {
-      markDone("val");
-      document.getElementById("loveText").innerHTML = LOVE_MESSAGE_HTML;
-      await transitionPanel(document.getElementById("panel-val"), "love", "love");
-      markDone("love");
-    });
+yesBtn.addEventListener("click", async () => {
+  markDone("val");
+
+  // SHRIMP CONFETTI MOMENT
+  shrimpBurst({ count: 140, durationMs: 1500, spread: 600 });
+
+  document.getElementById("loveText").innerHTML = LOVE_MESSAGE_HTML;
+  await transitionPanel(document.getElementById("panel-val"), "love", "love");
+  markDone("love");
+});
+
 
     /* ------------------ Replay ------------------ */
     document.getElementById("replay").addEventListener("click", async () => {
