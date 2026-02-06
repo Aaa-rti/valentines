@@ -282,16 +282,16 @@
     }
 
     /* Shrimp burst */
+/* falling shrimp rain */
 .shrimp {
   position: fixed;
-  left: 0;
-  top: 0;
-  font-size: 28px;
+  top: -40px;
+  font-size: 30px;
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
   will-change: transform, opacity;
 }
+
 
   </style>
 </head>
@@ -345,7 +345,6 @@
         -->
         <section id="screen-nick" class="screen">
           <div class="panel" id="panel-nick">
-            <p class="hint" id="nickPrompt">Pick the correct answer.</p>
             <div class="codebox" id="nickQuestion"></div>
             <div id="nickChoices" class="btns"></div>
             <div id="nickStatus" class="status"></div>
@@ -542,50 +541,56 @@ me %>%
       return a;
     }
 
-    function shrimpBurst({
-  count = 90,
-  durationMs = 1400,
-  spread = 520
+    function shrimpRain({
+  durationMs = 5000,   // how long it rains
+  spawnRate = 18,      // shrimp per 100ms (density)
+  fallTime = 2600      // how long each shrimp takes to fall
 } = {}) {
-  const emojis = ["🦐", "🍤"]; // shrimp + prawn tempura energy
 
-  const centerX = window.innerWidth / 2;
-  const centerY = window.innerHeight / 3;
+  const emojis = ["🦐", "🍤"];
 
-  for (let i = 0; i < count; i++) {
-    const el = document.createElement("div");
-    el.className = "shrimp";
-    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  const spawnInterval = 100;
+  const totalSpawns = Math.floor(durationMs / spawnInterval);
 
-    const angle = Math.random() * Math.PI * 2;
-    const radius = Math.random() * spread;
-    const dx = Math.cos(angle) * radius;
-    const dy = Math.sin(angle) * radius;
+  let tick = 0;
 
-    const rotate = (Math.random() * 720 - 360);
-    const driftY = 220 + Math.random() * 260; // extra fall
+  const interval = setInterval(() => {
 
-    el.style.left = `${centerX}px`;
-    el.style.top = `${centerY}px`;
-    el.style.opacity = "1";
+    for (let i = 0; i < spawnRate; i++) {
 
-    document.body.appendChild(el);
+      const el = document.createElement("div");
+      el.className = "shrimp";
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
 
-    el.animate(
-      [
-        { transform: `translate(-50%, -50%) translate(0px, 0px) rotate(0deg) scale(1)`, opacity: 1 },
-        { transform: `translate(-50%, -50%) translate(${dx}px, ${dy + driftY}px) rotate(${rotate}deg) scale(${0.8 + Math.random() * 0.6})`, opacity: 0 }
-      ],
-      {
-        duration: durationMs + Math.random() * 500,
-        easing: "cubic-bezier(.15,.8,.2,1)",
-        fill: "forwards"
-      }
-    );
+      const startX = Math.random() * window.innerWidth;
+      const driftX = (Math.random() - 0.5) * 200; // side wobble
+      const rotate = Math.random() * 720 - 360;
 
-    setTimeout(() => el.remove(), durationMs + 900);
-  }
+      el.style.left = `${startX}px`;
+
+      document.body.appendChild(el);
+
+      el.animate(
+        [
+          { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+          { transform: `translate(${driftX}px, ${window.innerHeight + 80}px) rotate(${rotate}deg)`, opacity: 0 }
+        ],
+        {
+          duration: fallTime + Math.random() * 1200,
+          easing: "cubic-bezier(.2,.8,.2,1)",
+          fill: "forwards"
+        }
+      );
+
+      setTimeout(() => el.remove(), fallTime + 1500);
+    }
+
+    tick++;
+    if (tick >= totalSpawns) clearInterval(interval);
+
+  }, spawnInterval);
 }
+
 
     function normalizeLine(s) {
       return s.trim().replace(/;$/, "").replace(/\s+/g, " ");
@@ -831,13 +836,13 @@ function isValidMutateLine(input) {
 yesBtn.addEventListener("click", async () => {
   markDone("val");
 
-  // SHRIMP CONFETTI MOMENT
-  shrimpBurst({ count: 140, durationMs: 1500, spread: 600 });
+  shrimpRain({ durationMs: 5000, spawnRate: 20 }); // 5 seconds of chaos
 
   document.getElementById("loveText").innerHTML = LOVE_MESSAGE_HTML;
   await transitionPanel(document.getElementById("panel-val"), "love", "love");
   markDone("love");
 });
+
 
 
     /* ------------------ Replay ------------------ */
